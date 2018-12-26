@@ -23,9 +23,10 @@ operations
 	-- Returns retailer name
 	public getName : ()  ==> String
 	getName() == return m_name;
-
-	public addProduct : Product * ItemInfo ==> ()
-	addProduct(product, info) ==
+	
+		--Adds a product and its info to items map
+	public insertProduct : Product * ItemInfo ==> ()
+	insertProduct(product, info) ==
 	(
 		m_items := m_items ++ {product |-> info}
 	)
