@@ -1,38 +1,38 @@
 class Product
 types
-	public ProductId = nat1;
+	public Id = nat1;
 	public String = seq1 of char;
 	
 values
 -- TODO Define values here
 
 instance variables
-	public id: ProductId;
-	public name: String;
-	public description: String;
+	public m_id: Id;
+	public m_name: String;
+	public m_description: String;
 	
 operations
 	-- Product constructor
-	public Product : ProductId * String * String ==> Product
-	Product(product_id, product_name, product_description) ==
+	public Product : Id * String * String ==> Product
+	Product(id, name, description) ==
 	(
-		id := product_id;
-		name := product_name;
-		description := product_description;
+		m_id := id;
+		m_name := name;
+		m_description := description;
 		return self;
 	);
 
 	-- Returns product id
-	public getId : ()  ==> ProductId
-	getId() == return id;
+	public getId : ()  ==> Id
+	getId() == return m_id;
 
 	-- Returns product name
 	public getName : ()  ==> String
-	getName() == return name;
+	getName() == return m_name;
 
 	-- Returns product description
 	public getDescription : ()  ==> String
-	getDescription() == return description;
+	getDescription() == return m_description;
 
 functions
 -- TODO Define functiones here

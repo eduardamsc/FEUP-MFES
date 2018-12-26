@@ -6,20 +6,20 @@ values
 -- TODO Define values here
 
 instance variables
-	public name: String;
+	public m_name: String;
 	
 operations
 	-- Brand constructor
 	public Brand : String ==> Brand
-	Brand(brand_name) ==
+	Brand(name) ==
 	(
-		name := brand_name;
+		m_name := name;
 		return self;
 	);
 
 	-- Returns brand name
 	public getName : ()  ==> String
-	getName() == return name;
+	getName() == return m_name;
 
 functions
 -- TODO Define functiones here
