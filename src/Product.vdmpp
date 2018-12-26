@@ -2,16 +2,19 @@ class Product
 types
 	public Id = nat1;
 	public String = seq1 of char;
+	public Review :: rating: int
+								   feedback: seq1 of char;
 	
 values
 -- TODO Define values here
 
 instance variables
 	public m_id: Id;
+	private static m_next_id : Id := 1;
 	public m_name: String;
 	public m_description: String;
 	public m_brand: Brand;
-	private static m_next_id : Id := 1;
+	public m_reviews: map User to Review := { |-> };
 	
 operations
 	-- Product constructor
@@ -41,6 +44,15 @@ operations
 		-- Returns product brand
 	public getBrand : ()  ==> Brand
 	getBrand() == return m_brand;
+	
+	--Adds a review and the user who did it to reviews map
+	public insertReview : User * Review ==> ()
+	insertReview(user, review) ==
+	(
+		m_reviews := m_reviews ++ {user |-> review}
+	)
+	pre user not in set dom m_reviews
+	post m_reviews = m_reviews~ ++ {user |-> review};
 
 functions
 -- TODO Define functiones here

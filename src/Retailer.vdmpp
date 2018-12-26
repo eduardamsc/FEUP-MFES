@@ -24,7 +24,7 @@ operations
 	public getName : ()  ==> String
 	getName() == return m_name;
 	
-		--Adds a product and its info to items map
+	--Adds a product and its info (stock and price) to items map
 	public insertProduct : Product * ItemInfo ==> ()
 	insertProduct(product, info) ==
 	(
