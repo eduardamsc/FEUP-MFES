@@ -10,15 +10,17 @@ instance variables
 	public m_id: Id;
 	public m_name: String;
 	public m_description: String;
+	public m_brand: Brand;
 	
 operations
 	-- Product constructor
-	public Product : Id * String * String ==> Product
-	Product(id, name, description) ==
+	public Product : Id * String * String * Brand ==> Product
+	Product(id, name, description, brand) ==
 	(
 		m_id := id;
 		m_name := name;
 		m_description := description;
+		m_brand := brand;
 		return self;
 	);
 
@@ -33,6 +35,10 @@ operations
 	-- Returns product description
 	public getDescription : ()  ==> String
 	getDescription() == return m_description;
+	
+		-- Returns product brand
+	public getBrand : ()  ==> Brand
+	getBrand() == return m_brand;
 
 functions
 -- TODO Define functiones here

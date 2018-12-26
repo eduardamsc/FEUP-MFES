@@ -1,0 +1,51 @@
+class ShopAdvizor
+types
+	public Products = set of Product;
+	public Users = set of User;
+	public Retailers = set of Retailer;
+	public Brands = set of Brand;
+	
+values
+-- TODO Define values here
+
+instance variables
+	public m_products: Products;
+	public m_users: Users;
+	public m_retailers: Retailers;
+	public m_brands: Brands;
+	
+operations
+	-- Product constructor
+	public ShopAdvizor :  Products * Users * Retailers * Brands ==> ShopAdvizor
+	ShopAdvizor(products, users, retailers, brands) ==
+	(
+		m_products := products;
+		m_users := users;
+		m_retailers := retailers;
+		m_brands := brands;
+		return self;
+	);
+	
+	-- Returns all products
+	public getProducts : ()  ==> Products
+	getProducts() == return m_products;
+	
+	-- Returns all users
+	public getUsers : ()  ==> Users
+	getUsers() == return m_users;
+	
+	-- Returns all retailers
+	public getRetailers : ()  ==> Retailers
+	getRetailers() == return m_retailers;
+	
+	-- Returns all brands
+	public getBrands : ()  ==> Brands
+	getBrands() == return m_brands;
+
+functions
+-- TODO Define functiones here
+
+traces
+-- TODO Define Combinatorial Test Traces here
+
+end ShopAdvizor
