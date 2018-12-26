@@ -51,7 +51,33 @@ operations
 	pre product not in set m_products
 	post m_products = m_products~ union {product};
 	
-
+	--Adds a user to users set
+	public insertUser : User ==> ()
+	insertUser(user) ==
+	(
+		m_users := m_users union {user}
+	)
+	pre user not in set m_users
+	post m_users = m_users~ union {user};
+	
+	--Adds a retailer to retailers set
+	public insertRetailer : Retailer ==> ()
+	insertRetailer(retailer) ==
+	(
+		m_retailers := m_retailers union {retailer}
+	)
+	pre retailer not in set m_retailers
+	post m_retailers = m_retailers~ union {retailer};
+	
+	--Adds a brand to brands set
+	public insertBrand : Brand ==> ()
+	insertBrand(brand) ==
+	(
+		m_brands := m_brands union {brand}
+	)
+	pre brand not in set m_brands
+	post m_brands = m_brands~ union {brand};
+	
 functions
 -- TODO Define functiones here
 
