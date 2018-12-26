@@ -1,19 +1,18 @@
 class Product
 types
-	public ProductId = nat1;
 	public String = seq1 of char;
 	
 values
 -- TODO Define values here
 
 instance variables
-	public id: ProductId;
+	public id: nat1;
 	public name: String;
 	public description: String;
 	
 operations
 	-- Product constructor
-	public Product : ProductId * String * String ==> Product
+	public Product : nat1 * String * String ==> Product
 	Product(product_id, product_name, product_description) ==
 	(
 		id := product_id;
@@ -23,7 +22,7 @@ operations
 	);
 
 	-- Returns product id
-	public getId : ()  ==> ProductId
+	public getId : ()  ==> nat1
 	getId() == return id;
 
 	-- Returns product name
