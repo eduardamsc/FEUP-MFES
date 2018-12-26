@@ -1,13 +1,36 @@
 class User
-	instance variables
-		private m_username: seq of char;
-		private m_password: seq of char;
+types
+	public String = seq1 of char;
 	
-	operations
-		public User(username: seq of char, password: seq of char) user: User == (
-			m_username := username;
-			m_password := password;
-			return self;
-		)
-			
+values
+-- TODO Define values here
+
+instance variables
+	public username: String;
+	private password: String;
+	
+operations
+	-- User constructor
+	public User : String * String ==> User
+	User(user_username, user_password) ==
+	(
+		username := user_username;
+		password := user_password;
+		return self;
+	);
+
+	-- Returns user username
+	public getUserName : ()  ==> String
+	getUserName() == return username;
+
+	-- Returns user password
+	public getPassword : ()  ==> String
+	getPassword() == return password;
+
+functions
+-- TODO Define functiones here
+
+traces
+-- TODO Define Combinatorial Test Traces here
+
 end User
