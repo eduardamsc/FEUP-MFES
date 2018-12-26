@@ -20,7 +20,7 @@ operations
 		return self;
 	);
 
-	-- Returns retailer name
+	-- Returns retailer's name
 	public getName : ()  ==> String
 	getName() == return m_name;
 	

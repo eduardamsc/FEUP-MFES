@@ -20,7 +20,7 @@ class User
 		public passwordMatches : String ==> bool
 		passwordMatches(password) == return m_password = password;
 			
-		-- Returns username
+		-- Returns user's username
 		public getUsername : ()  ==> String
 		getUsername() == return m_username;
 end User

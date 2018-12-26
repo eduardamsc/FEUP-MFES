@@ -17,7 +17,7 @@ operations
 		return self;
 	);
 
-	-- Returns brand name
+	-- Returns brand's name
 	public getName : ()  ==> String
 	getName() == return m_name;
 
