@@ -26,6 +26,17 @@ operations
 		return self;
 	);
 	
+	-- ShopAdvizor constructor with no arguments
+	public ShopAdvizor : () ==> ShopAdvizor
+	ShopAdvizor() ==
+	(
+		m_products := {};
+		m_users := {};
+		m_retailers := {};
+		m_brands := {};
+		return self;
+	);
+	
 	-- Returns all products
 	public getProducts : ()  ==> Products
 	getProducts() == return m_products;
