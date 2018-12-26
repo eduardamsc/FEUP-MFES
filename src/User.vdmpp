@@ -7,18 +7,20 @@ class User
 		private m_password: String;
 	
 	operations
-		public User(username: String, password: String) user: User == (
+		-- User constructor
+		public User : String * String ==> User
+		User(username, password) ==
+		(
 			m_username := username;
 			m_password := password;
 			return self;
 		);
 		
-		public passwordMatches(password: String) matches: bool == (
-			return m_password = password;
-		);
-		
-		public getUsername() username: String == (
-			return m_username;
-		);
+		-- Checks if the password matches
+		public passwordMatches : String ==> bool
+		passwordMatches(password) == return m_password = password;
 			
+		-- Returns username
+		public getUsername : ()  ==> String
+		getUsername() == return m_username;
 end User
