@@ -1,14 +1,30 @@
 class Brand
 types
--- TODO Define types here
+	public String = seq1 of char;
+	
 values
 -- TODO Define values here
+
 instance variables
--- TODO Define instance variables here
+	public name: String;
+	
 operations
--- TODO Define operations here
+	-- Brand constructor
+	public Brand : String ==> Brand
+	Brand(brand_name) ==
+	(
+		name := brand_name;
+		return self;
+	);
+
+	-- Returns brand name
+	public getName : ()  ==> String
+	getName() == return name;
+
 functions
 -- TODO Define functiones here
+
 traces
 -- TODO Define Combinatorial Test Traces here
+
 end Brand
