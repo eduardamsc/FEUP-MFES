@@ -15,7 +15,7 @@ instance variables
 	public m_brands: Brands;
 	
 operations
-	-- Product constructor
+	-- ShopAdvizor constructor
 	public ShopAdvizor :  Products * Users * Retailers * Brands ==> ShopAdvizor
 	ShopAdvizor(products, users, retailers, brands) ==
 	(
@@ -41,6 +41,16 @@ operations
 	-- Returns all brands
 	public getBrands : ()  ==> Brands
 	getBrands() == return m_brands;
+	
+	--Adds a product to products set
+	public insertProduct : Product ==> ()
+	insertProduct(product) ==
+	(
+		m_products := m_products union {product}
+	)
+	pre product not in set m_products
+	post m_products = m_products~ union {product};
+	
 
 functions
 -- TODO Define functiones here
