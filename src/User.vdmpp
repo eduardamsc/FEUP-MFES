@@ -3,24 +3,25 @@ class User
 		public String = seq1 of char;
 	
 	instance variables
-		public m_username: String;
-		private m_password: String;
+		public username: String;
+		private password: String;
 	
 	operations
 		-- User constructor
 		public User : String * String ==> User
-		User(username, password) ==
+		User(user_username, user_password) ==
 		(
-			m_username := username;
-			m_password := password;
+			username := user_username;
+			password := user_password;
 			return self;
 		);
 		
-		-- Checks if the password matches
-		public passwordMatches : String ==> bool
-		passwordMatches(password) == return m_password = password;
-			
 		-- Returns username
 		public getUsername : ()  ==> String
-		getUsername() == return m_username;
+		getUsername() == return username;
+		
+		-- Checks if the password matches
+		public passwordMatches : String ==> bool
+		passwordMatches(user_password) == return password = user_password;
+		
 end User
