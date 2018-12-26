@@ -1,14 +1,13 @@
 class User
-types
--- TODO Define types here
-values
--- TODO Define values here
-instance variables
--- TODO Define instance variables here
-operations
--- TODO Define operations here
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+	instance variables
+		private m_username: seq of char;
+		private m_password: seq of char;
+	
+	operations
+		public User(username: seq of char, password: seq of char) user: User == (
+			m_username := username;
+			m_password := password;
+			return self;
+		)
+			
 end User
