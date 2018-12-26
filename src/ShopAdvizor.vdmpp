@@ -1,0 +1,98 @@
+class ShopAdvizor
+types
+	public Products = set of Product;
+	public Users = set of User;
+	public Retailers = set of Retailer;
+	public Brands = set of Brand;
+	
+values
+-- TODO Define values here
+
+instance variables
+	public m_products: Products;
+	public m_users: Users;
+	public m_retailers: Retailers;
+	public m_brands: Brands;
+	
+operations
+	-- ShopAdvizor constructor
+	public ShopAdvizor :  Products * Users * Retailers * Brands ==> ShopAdvizor
+	ShopAdvizor(products, users, retailers, brands) ==
+	(
+		m_products := products;
+		m_users := users;
+		m_retailers := retailers;
+		m_brands := brands;
+		return self;
+	);
+	
+	-- ShopAdvizor constructor with no arguments
+	public ShopAdvizor : () ==> ShopAdvizor
+	ShopAdvizor() ==
+	(
+		m_products := {};
+		m_users := {};
+		m_retailers := {};
+		m_brands := {};
+		return self;
+	);
+	
+	-- Returns all products
+	public getProducts : ()  ==> Products
+	getProducts() == return m_products;
+	
+	-- Returns all users
+	public getUsers : ()  ==> Users
+	getUsers() == return m_users;
+	
+	-- Returns all retailers
+	public getRetailers : ()  ==> Retailers
+	getRetailers() == return m_retailers;
+	
+	-- Returns all brands
+	public getBrands : ()  ==> Brands
+	getBrands() == return m_brands;
+	
+	--Adds a product to products set
+	public insertProduct : Product ==> ()
+	insertProduct(product) ==
+	(
+		m_products := m_products union {product}
+	)
+	pre product not in set m_products
+	post m_products = m_products~ union {product};
+	
+	--Adds a user to users set
+	public insertUser : User ==> ()
+	insertUser(user) ==
+	(
+		m_users := m_users union {user}
+	)
+	pre user not in set m_users
+	post m_users = m_users~ union {user};
+	
+	--Adds a retailer to retailers set
+	public insertRetailer : Retailer ==> ()
+	insertRetailer(retailer) ==
+	(
+		m_retailers := m_retailers union {retailer}
+	)
+	pre retailer not in set m_retailers
+	post m_retailers = m_retailers~ union {retailer};
+	
+	--Adds a brand to brands set
+	public insertBrand : Brand ==> ()
+	insertBrand(brand) ==
+	(
+		m_brands := m_brands union {brand}
+	)
+	pre brand not in set m_brands
+	post m_brands = m_brands~ union {brand};
+	
+functions
+-- TODO Define functiones here
+
+traces
+-- TODO Define Combinatorial Test Traces here
+
+end ShopAdvizor
