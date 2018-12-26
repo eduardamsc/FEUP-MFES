@@ -10,15 +10,17 @@ instance variables
 	public m_id: Id;
 	public m_name: String;
 	public m_description: String;
+	private static m_next_id : Id := 1;
 	
 operations
 	-- Product constructor
-	public Product : Id * String * String ==> Product
-	Product(id, name, description) ==
+	public Product : String * String ==> Product
+	Product(name, description) ==
 	(
-		m_id := id;
+		m_id := m_next_id;
 		m_name := name;
 		m_description := description;
+		m_next_id := m_next_id + 1;
 		return self;
 	);
 

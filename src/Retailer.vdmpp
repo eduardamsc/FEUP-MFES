@@ -1,12 +1,15 @@
 class Retailer
 types
 	public String = seq1 of char;
+	public ItemInfo :: stock: int
+								     price: rat;
 	
 values
 -- TODO Define values here
 
 instance variables
 	public m_name: String;
+	public m_items: map Product to ItemInfo := { |-> };
 
 operations
 	-- Retailer constructor
@@ -20,6 +23,14 @@ operations
 	-- Returns retailer name
 	public getName : ()  ==> String
 	getName() == return m_name;
+
+	public addProduct : Product * ItemInfo ==> ()
+	addProduct(product, info) ==
+	(
+		m_items := m_items ++ {product |-> info}
+	)
+	pre product not in set dom m_items
+	post m_items = m_items~ ++ {product |-> info};
 
 functions
 -- TODO Define functiones here

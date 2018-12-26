@@ -1,0 +1,25 @@
+class ShopAdvizorTest
+ instance variables
+ 	m_retailer : Retailer := new Retailer("Pingo Doce");
+ 
+ operations
+	 private assertTrue: bool ==> ()
+	 assertTrue(cond) == return
+	 pre cond;
+	
+	 private testAddProductToRetailer: () ==> ()
+	 testAddProductToRetailer() ==
+	 (
+	 	dcl product : Product := new Product("Bolachas", "Bolachas de Chocolate");
+	 	dcl info : Retailer`ItemInfo := mk_Retailer`ItemInfo(20, 2.1);
+	 	m_retailer.addProduct(product, info);
+	 );
+	 
+	 public static main: () ==> ()
+	 main() ==
+	 (
+	 	dcl test : ShopAdvizorTest := new ShopAdvizorTest();
+	 	test.testAddProductToRetailer();
+	 );
+	 
+end ShopAdvizorTest
