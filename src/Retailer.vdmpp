@@ -1,14 +1,30 @@
 class Retailer
 types
--- TODO Define types here
+	public String = seq1 of char;
+	
 values
 -- TODO Define values here
+
 instance variables
--- TODO Define instance variables here
+	public name: String;
+
 operations
--- TODO Define operations here
+	-- Retailer constructor
+	public Retailer : String ==> Retailer
+	Retailer(retailer_name) ==
+	(
+		name := retailer_name;
+		return self;
+	);
+
+	-- Returns retailer name
+	public getName : ()  ==> String
+	getName() == return name;
+
 functions
 -- TODO Define functiones here
+
 traces
 -- TODO Define Combinatorial Test Traces here
+
 end Retailer

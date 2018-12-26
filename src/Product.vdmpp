@@ -1,14 +1,43 @@
 class Product
 types
--- TODO Define types here
+	public ProductId = nat1;
+	public String = seq1 of char;
+	
 values
 -- TODO Define values here
+
 instance variables
--- TODO Define instance variables here
+	public id: ProductId;
+	public name: String;
+	public description: String;
+	
 operations
--- TODO Define operations here
+	-- Product constructor
+	public Product : ProductId * String * String ==> Product
+	Product(product_id, product_name, product_description) ==
+	(
+		id := product_id;
+		name := product_name;
+		description := product_description;
+		return self;
+	);
+
+	-- Returns product id
+	public getId : ()  ==> ProductId
+	getId() == return id;
+
+	-- Returns product name
+	public getName : ()  ==> String
+	getName() == return name;
+
+	-- Returns product description
+	public getDescription : ()  ==> String
+	getDescription() == return description;
+
 functions
 -- TODO Define functiones here
+
 traces
 -- TODO Define Combinatorial Test Traces here
+
 end Product
