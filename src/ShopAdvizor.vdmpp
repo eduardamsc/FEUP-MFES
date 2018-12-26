@@ -4,7 +4,7 @@ types
 	public Users = set of User;
 	public Retailers = set of Retailer;
 	public Brands = set of Brand;
-	
+		
 values
 -- TODO Define values here
 
@@ -13,6 +13,11 @@ instance variables
 	public m_users: Users;
 	public m_retailers: Retailers;
 	public m_brands: Brands;
+	
+	inv forall b1, b2 in set m_brands & b1 <> b2 => b1.m_name <> b2.m_name;
+	inv forall r1, r2 in set m_retailers & r1 <> r2 => r1.m_name <> r2.m_name;
+	inv forall u1, u2 in set m_users & u1 <> u2 => u1.m_username <> u2.m_username;
+	inv forall p1, p2 in set m_products & p1 <> p2 => p1.m_name <> p2.m_name or p1.m_brand <> p2.m_brand;
 	
 operations
 	-- ShopAdvizor constructor
