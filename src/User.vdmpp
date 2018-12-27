@@ -23,4 +23,5 @@ class User
 		-- Returns user's username
 		public getUsername : ()  ==> String
 		getUsername() == return m_username;
+		
 end User

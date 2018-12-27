@@ -17,8 +17,8 @@ instance variables
 	public m_name: String;
 	public m_description: String;
 	public m_brand: Brand;
-	public m_ingredients: map Substance to Composition := { |->};
-	public m_reviews: map User to Review := { |-> };
+	public m_ingredients: map Substance to Composition;
+	public m_reviews: map User to Review;
 	
 operations
 	-- Product constructor
@@ -30,6 +30,8 @@ operations
 		m_name := name;
 		m_description := description;
 		m_brand := brand;
+		m_ingredients := { |-> };
+		m_reviews := { |-> };
 		return self;
 	);
 
@@ -48,6 +50,10 @@ operations
 	-- Returns product's brand
 	public getBrand : ()  ==> Brand
 	getBrand() == return m_brand;
+	
+	-- Returns product's reviews
+	public getReviews : ()  ==> set of Review
+	getReviews() == return rng m_reviews;
 	
 	--Adds a review and the user who did it to reviews map
 	public insertReview : User * Review ==> ()
