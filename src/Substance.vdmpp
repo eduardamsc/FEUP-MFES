@@ -1,38 +1,25 @@
 class Substance
 types
 	public String = seq1 of char;
-	public Quantity = real;
 	
 values
 -- TODO Define values here
 
 instance variables
 	public m_name: String;
-	public m_quantity: Quantity;
-	public m_unit: String;
 	
 operations
 	-- Substance constructor
-	public Substance : String * Quantity * String ==> Substance
-	Substance(name, quantity, unit) ==
+	public Substance : String ==> Substance
+	Substance(name) ==
 	(
 		m_name := name;
-		m_quantity := quantity;
-		m_unit := unit;
 		return self;
 	);
 	
 	-- Returns substance's name
 	public getName : ()  ==> String
 	getName() == return m_name;
-	
-	-- Returns substance's quantity
-	public getQuantity : ()  ==> Quantity
-	getQuantity() == return m_quantity;
-	
-	-- Returns substance's unit
-	public getUnit : ()  ==> String
-	getUnit() == return m_unit;
 
 functions
 -- TODO Define functiones here

@@ -11,7 +11,7 @@ class ShopAdvizorTest
 	 testAddProductToRetailer() ==
 	 (
 	 	dcl brand : Brand := new Brand("Chip Mix");
-	 	dcl product : Product := new Product("Bolachas", "Bolachas de Chocolate", brand, {});
+	 	dcl product : Product := new Product("Bolachas", "Bolachas de Chocolate", brand);
 	 	dcl info : Retailer`ItemInfo := mk_Retailer`ItemInfo(20, 2.1);
 	 	m_retailer.insertProduct(product, info);
 	 );

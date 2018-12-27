@@ -2,7 +2,8 @@ class Product
 types
 	public Id = nat1;
 	public String = seq1 of char;
-	public Ingredients = set of Substance;
+	public Composition :: quantity: real
+										unit: seq1 of char;
 	public Review :: rating: int
 								   feedback: seq1 of char;
 	
@@ -15,20 +16,19 @@ instance variables
 	public m_name: String;
 	public m_description: String;
 	public m_brand: Brand;
-	public m_ingredients: Ingredients;
+	public m_ingredients: map Substance to Composition := { |->};
 	public m_reviews: map User to Review := { |-> };
 	
 operations
 	-- Product constructor
-	public Product : String * String * Brand * Ingredients ==> Product
-	Product(name, description, brand, ingredients) ==
+	public Product : String * String * Brand ==> Product
+	Product(name, description, brand) ==
 	(
 		m_id := m_next_id;
 		m_next_id := m_next_id + 1;
 		m_name := name;
 		m_description := description;
 		m_brand := brand;
-		m_ingredients := ingredients;
 		return self;
 	);
 
@@ -48,10 +48,6 @@ operations
 	public getBrand : ()  ==> Brand
 	getBrand() == return m_brand;
 	
-	-- Returns product's ingredients
-	public getIngredients : ()  ==> Ingredients
-	getIngredients() == return m_ingredients;
-	
 	--Adds a review and the user who did it to reviews map
 	public insertReview : User * Review ==> ()
 	insertReview(user, review) ==
@@ -61,14 +57,14 @@ operations
 	pre user not in set dom m_reviews
 	post m_reviews = m_reviews~ ++ {user |-> review};
 	
-	--Adds an ingredient to ingredients set
-	public insertIngredient : Substance ==> ()
-	insertIngredient(ingredient) ==
+	--Adds an igredient and its quantity and unit to ingredients map
+	public insertIngredient : Substance * Composition ==> ()
+	insertIngredient(ingredient, composition) ==
 	(
-		m_ingredients := m_ingredients union {ingredient}
+		m_ingredients := m_ingredients ++ {ingredient |-> composition}
 	)
-	pre ingredient not in set m_ingredients
-	post m_ingredients = m_ingredients~ union {ingredient};
+	pre ingredient not in set dom m_ingredients
+	post m_ingredients = m_ingredients~ ++ {ingredient |-> composition};
 
 functions
 -- TODO Define functiones here
