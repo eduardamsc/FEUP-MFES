@@ -3,13 +3,14 @@ types
 	public Id = nat1;
 	public String = seq1 of char;
 	public Composition :: quantity: real
-										unit: seq1 of char;
+										unit: seq1 of char
+										inv c == c.unit in set unitValues;
 	public Review :: rating: int
 								   feedback: seq1 of char;
 	
 values
--- TODO Define values here
-
+	public unitValues : set of seq1 of char = {"Kg", "g", "l", "ml", "%", "Kcal", "Kj"};
+	
 instance variables
 	public m_id: Id;
 	private static m_next_id : Id := 1;
