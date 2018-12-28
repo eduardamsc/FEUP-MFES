@@ -7,7 +7,7 @@ class ShopAdvizorTest
 	 assertTrue(cond) == return
 	 pre cond;
 	
-	 private testAddProductToRetailer: () ==> ()
+	 public testAddProductToRetailer: () ==> ()
 	 testAddProductToRetailer() ==
 	 (
 	 	dcl brand : Brand := new Brand("Chip Mix");
@@ -16,11 +16,25 @@ class ShopAdvizorTest
 	 	m_retailer.insertProduct(product, info);
 	 );
 	 
+	 public testAverageReviewRating : () ==> ()
+	 testAverageReviewRating() == 
+	 (
+	 	dcl brand : Brand := new Brand("Chip Mix");
+	 	dcl product : Product := new Product("Bolachas", "Bolachas de Chocolate", brand);
+	 	
+	 	assertTrue(product.getAvgRating() = nil);
+	 	product.insertReview(new User("name","pass"), mk_Product`Review(1, "mau"));
+	 	assertTrue(product.getAvgRating() = 1);
+	 	product.insertReview(new User("name2","pass2"), mk_Product`Review(4, "mau"));
+	 	assertTrue(product.getAvgRating() = 2.5);	 	
+	 );
+	 
 	 public static main: () ==> ()
 	 main() ==
 	 (
 	 	dcl test : ShopAdvizorTest := new ShopAdvizorTest();
 	 	test.testAddProductToRetailer();
+	 	test.testAverageReviewRating();
 	 );
 	 
 end ShopAdvizorTest

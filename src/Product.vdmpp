@@ -5,8 +5,9 @@ types
 	public Composition :: quantity: real
 										unit: seq1 of char
 										inv c == c.unit in set unitValues;
-	public Review :: rating: int
-								   feedback: seq1 of char;
+	public Review :: rating: nat1
+								   feedback: seq1 of char
+	inv review == review.rating >= 1 and review.rating <= 5;
 	
 values
 	public unitValues : set of seq1 of char = {"Kg", "g", "l", "ml", "%", "Kcal", "Kj"};
@@ -54,6 +55,20 @@ operations
 	-- Returns product's reviews
 	public getReviews : ()  ==> set of Review
 	getReviews() == return rng m_reviews;
+	
+	-- Returns the average review rating
+	public getAvgRating : () ==> [real]
+	getAvgRating() == 
+	(
+	 dcl sum : int := 0;
+	 dcl num_reviews : int := card rng m_reviews;
+	 
+	 if num_reviews = 0
+	 	then return nil;
+	 
+	 for all review in set rng m_reviews do sum := sum + review.rating;
+	 return sum / num_reviews;
+	);
 	
 	--Adds a review and the user who did it to reviews map
 	public insertReview : User * Review ==> ()
