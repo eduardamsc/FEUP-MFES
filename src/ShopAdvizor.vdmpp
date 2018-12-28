@@ -117,15 +117,15 @@ operations
 	);
 	
 	-- Gets all reviews given by a user
-	public getUserReviews : seq1 of char ==> [set of Product`Review]
+	public getUserReviews : seq1 of char ==> [set of (Product * Product`Review)]
 	getUserReviews(username) == 
 	(	
 		dcl user : [User] := getUser(username);
-		dcl reviews : [set of Product`Review];
+		dcl reviews : set of (Product * Product`Review);
 		if user = nil
 			then return nil
 		else (
-			reviews := dunion { { r.m_reviews(user) | u in set dom r.m_reviews & u = user} | r in set m_products};
+			reviews := dunion { { mk_(r, r.m_reviews(user)) | u in set dom r.m_reviews & u = user} | r in set m_products};
 			return reviews;
 		)
 	);
