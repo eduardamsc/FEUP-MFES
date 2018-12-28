@@ -66,6 +66,70 @@ operations
 	public getSubstances : ()  ==> Substances
 	getSubstances() == return m_substances;
 	
+	-- Get brand by name
+	public getBrand : seq1 of char ==> [Brand]
+	getBrand(name) == 
+	(	
+		dcl brand : Brand;
+		if exists1 b in set m_brands & b.m_name = name
+		then (
+			brand := iota b in set m_brands & b.m_name = name;
+			return brand;
+		)
+		else return nil;
+	);	
+	
+	-- Get user by name
+	public getUser : seq1 of char ==> [User]
+	getUser(name) == 
+	(	
+		dcl user : User;
+		if exists1 u in set m_users & u.m_username = name
+		then (
+			user := iota u in set m_users & u.m_username = name;
+			return user;
+		)
+		else return nil;
+	);	
+	
+	-- Get product by name and brand
+	public getProduct : seq1 of char * Brand ==> [Product]
+	getProduct(name, brand) == 
+	(	
+		dcl product : Product;
+		if exists1 p in set m_products & p.m_name = name and p.m_brand = brand
+		then (
+			product := iota p in set m_products & p.m_name = name and p.m_brand = brand;
+			return product;
+		)
+		else return nil;
+	);
+	
+	-- Gets all reviews of a product
+	public getProductReviews : seq1 of char * seq1 of char ==> [set of Product`Review]
+	getProductReviews(product_name, brand_name) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product] := getProduct(product_name, brand);
+		if brand = nil or product = nil
+			then return nil
+		else return product.getReviews()
+	);
+	
+	-- Gets all reviews given by a user
+	public getUserReviews : seq1 of char ==> [set of Product`Review]
+	getUserReviews(username) == 
+	(	
+		dcl user : [User] := getUser(username);
+		dcl reviews : [set of Product`Review];
+		if user = nil
+			then return nil
+		else (
+			reviews := dunion { { r.m_reviews(user) | u in set dom r.m_reviews & u = user} | r in set m_products};
+			return reviews;
+		)
+	);
+	
 	--Adds a product to products set
 	public insertProduct : Product ==> ()
 	insertProduct(product) ==
@@ -112,8 +176,16 @@ operations
 	post m_substances = m_substances~ union {substance};
 	
 functions
--- TODO Define functiones here
-
+	-- Get brand by name
+	/*public getByName[@T] : seq1 of char * set of @T -> [@T]
+	getByName(name, vec) == 
+	(	
+		if exists1 e in set vec & e.m_name = name
+		then (
+			return iota e in set vec & e.m_name = name;
+		)
+		else return nil;
+	);*/
 traces
 -- TODO Define Combinatorial Test Traces here
 
