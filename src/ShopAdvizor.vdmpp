@@ -7,7 +7,6 @@ types
 	public Substances = set of Substance;
 		
 values
--- TODO Define values here
 
 instance variables
 	public m_products: Products;
@@ -130,6 +129,25 @@ operations
 		)
 	);
 	
+	-- Gets the retailer with the lowest price on a product
+	public getLowestPriceRetailer : Product ==> [Retailer * rat]
+	getLowestPriceRetailer(product) == 
+	(	
+		dcl retailer : Retailer * rat; -- Retailer that sells for the lowest price
+		dcl retailers : set of (Retailer * rat); -- Retailers that sell the product
+		if product not in set m_products
+			then return nil
+		else (
+			retailers := { mk_(r, r.m_items(product).price) | r in set m_retailers & product in set dom r.m_items };
+			if exists r1 in set retailers & (forall r2 in set retailers & r1.#2 <= r2.#2)
+				then (
+					retailer := iota r1 in set retailers & (forall r2 in set retailers & r1.#2 <= r2.#2);
+					return retailer;
+				)
+			else return nil;
+		)
+	);
+	
 	--Adds a product to products set
 	public insertProduct : Product ==> ()
 	insertProduct(product) ==
@@ -185,17 +203,7 @@ operations
 	);
 	
 functions
-	-- Get brand by name
-	/*public getByName[@T] : seq1 of char * set of @T -> [@T]
-	getByName(name, vec) == 
-	(	
-		if exists1 e in set vec & e.m_name = name
-		then (
-			return iota e in set vec & e.m_name = name;
-		)
-		else return nil;
-	);*/
+
 traces
--- TODO Define Combinatorial Test Traces here
 
 end ShopAdvizor
