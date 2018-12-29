@@ -175,6 +175,15 @@ operations
 	pre substance not in set m_substances
 	post m_substances = m_substances~ union {substance};
 	
+	--Login
+	public login : seq1 of char * seq1 of char ==> [User]
+	login(username, password) == 
+	(
+		if exists1 u in set m_users & u.m_username = username and u.passwordMatches(password)
+			then return iota u in set m_users & u.m_username = username and u.passwordMatches(password)
+		else return nil;
+	);
+	
 functions
 	-- Get brand by name
 	/*public getByName[@T] : seq1 of char * set of @T -> [@T]

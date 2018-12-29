@@ -1,7 +1,6 @@
 class ShopAdvizorTest
  instance variables
- 	m_retailer : Retailer := new Retailer("Pingo Doce");
- 
+  
  operations
 	 private assertTrue: bool ==> ()
 	 assertTrue(cond) == return
@@ -13,7 +12,8 @@ class ShopAdvizorTest
 	 	dcl brand : Brand := new Brand("Chip Mix");
 	 	dcl product : Product := new Product("Bolachas", "Bolachas de Chocolate", brand);
 	 	dcl info : Retailer`ItemInfo := mk_Retailer`ItemInfo(20, 2.1);
-	 	m_retailer.insertProduct(product, info);
+	 	dcl retailer : Retailer := new Retailer("Pingo Doce");
+	 	retailer.insertProduct(product, info);
 	 );
 	 
 	 public testAverageReviewRating : () ==> ()
@@ -29,12 +29,47 @@ class ShopAdvizorTest
 	 	assertTrue(product.getAvgRating() = 2.5);	 	
 	 );
 	 
+	 public testUserReviews : () ==> ()
+	 testUserReviews() == 
+	 (
+	 	dcl shopAdvizor : ShopAdvizor := new ShopAdvizor();
+		dcl p1 : Product := new Product("p1", "pd1", new Brand("b1"));
+		dcl p2 : Product := new Product("p2", "pd2", new Brand("b2"));
+		dcl u1 : User := new User("n1", "np1");
+		dcl u2 : User := new User("n2", "np2");
+		shopAdvizor.insertProduct(p1);
+		shopAdvizor.insertProduct(p2);
+		shopAdvizor.insertUser(u1);
+		shopAdvizor.insertUser(u2);
+		assertTrue(shopAdvizor.getUserReviews("n3") = nil); -- User n3 is not in the system
+		assertTrue(shopAdvizor.getUserReviews("n1") = {}); -- User n1 does not have any reviews
+		p1.insertReview(u1, mk_Product`Review(1, "fb1")); -- User1 has a review on Product1
+		assertTrue(shopAdvizor.getUserReviews("n1") = { mk_(p1, mk_Product`Review(1, "fb1")) }); 
+		p1.insertReview(u2, mk_Product`Review(2, "fb2")); -- User2 has a review on Product1
+		assertTrue(shopAdvizor.getUserReviews("n2") = { mk_(p1, mk_Product`Review(2, "fb2")) }); 
+		p2.insertReview(u1, mk_Product`Review(5, "fb1")); -- User1 has a review on Product1 and Product2
+		assertTrue(shopAdvizor.getUserReviews("n1") = { mk_(p1, mk_Product`Review(1, "fb1")), mk_(p2, mk_Product`Review(5, "fb1")) });
+	 );
+	 
+	 public testLogin : () ==> ()
+	 testLogin() == 
+	 (
+ 		 	dcl shopAdvizor : ShopAdvizor := new ShopAdvizor();
+ 		 	dcl u1 : User := new User("user", "pass");
+			shopAdvizor.insertUser(u1);
+			assertTrue(shopAdvizor.login("user", "123") = nil);
+			assertTrue(shopAdvizor.login("123", "pass") = nil);
+			assertTrue(shopAdvizor.login("user", "pass") = u1);
+	 );
+	 
 	 public static main: () ==> ()
 	 main() ==
 	 (
 	 	dcl test : ShopAdvizorTest := new ShopAdvizorTest();
 	 	test.testAddProductToRetailer();
 	 	test.testAverageReviewRating();
+	 	test.testUserReviews();
+	 	test.testLogin();
 	 );
 	 
 end ShopAdvizorTest
