@@ -2,6 +2,7 @@ class Product
 types
 	public Id = nat1;
 	public String = seq1 of char;
+	public Substance = seq1 of char;
 	public Composition :: quantity: real
 										unit: seq1 of char
 										inv c == c.unit in set unitValues;
@@ -10,7 +11,7 @@ types
 	inv review == review.rating >= 1 and review.rating <= 5;
 	
 values
-	public unitValues : set of seq1 of char = {"Kg", "g", "l", "ml", "%", "Kcal", "Kj"};
+	public unitValues : set of seq1 of char = {"Kg", "g", "l", "ml", "%", "units"};
 	
 instance variables
 	public m_id: Id;

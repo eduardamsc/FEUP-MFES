@@ -9,7 +9,6 @@ instance variables
 	public m_users: set of User;
 	public m_retailers: set of Retailer;
 	public m_brands: set of Brand;
-	public m_substances: set of Substance;
 	public m_activities: set of Activity;
 	
 	inv forall b1, b2 in set m_brands & b1 <> b2 => b1.m_name <> b2.m_name;
@@ -27,7 +26,6 @@ operations
 		m_users := {};
 		m_retailers := {};
 		m_brands := {};
-		m_substances := {};
 		m_activities := {};
 		return self;
 	);
@@ -89,9 +87,10 @@ operations
 	getProductReviews(product_name, brand_name) == 
 	(	
 		dcl brand : [Brand] := getBrand(brand_name);
-		dcl product : [Product] := getProduct(product_name, brand);
-		if brand = nil or product = nil
-			then return nil
+		dcl product : [Product];
+		if brand = nil then return nil;
+		product := getProduct(product_name, brand);
+		if product = nil then return nil
 		else return product.m_reviews
 	);
 	
@@ -172,15 +171,6 @@ operations
 	)
 	pre brand not in set m_brands
 	post m_brands = m_brands~ union {brand};
-	
-	--Adds a substance to substances set
-	public insertSubstance : Substance ==> ()
-	insertSubstance(substance) ==
-	(
-		m_substances := m_substances union {substance}
-	)
-	pre substance not in set m_substances
-	post m_substances = m_substances~ union {substance};
 	
 	--Login
 	public login : String * String ==> [User]

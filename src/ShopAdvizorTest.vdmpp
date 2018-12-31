@@ -30,26 +30,38 @@ class ShopAdvizorTest
 	 	assertTrue(product.getAvgRating() = 2.5);	 	
 	 );
 	 
-	 public testUserReviews : () ==> ()
-	 testUserReviews() == 
+	 public testReviews : () ==> ()
+	 testReviews() == 
 	 (
 	 	dcl shopAdvizor : ShopAdvizor := new ShopAdvizor();
-		dcl p1 : Product := new Product("p1", "pd1", new Brand("b1"));
-		dcl p2 : Product := new Product("p2", "pd2", new Brand("b2"));
+	 	dcl b1 : Brand := new Brand("b1");
+	 	dcl b2 : Brand := new Brand("b2");
+		dcl p1 : Product := new Product("p1", "pd1", b1);
+		dcl p2 : Product := new Product("p2", "pd2", b2);
 		dcl u1 : User := new User("n1", "np1");
 		dcl u2 : User := new User("n2", "np2");
+		shopAdvizor.insertBrand(b1);
+		shopAdvizor.insertBrand(b2);
 		shopAdvizor.insertProduct(p1);
 		shopAdvizor.insertProduct(p2);
 		shopAdvizor.insertUser(u1);
 		shopAdvizor.insertUser(u2);
+		
 		assertTrue(shopAdvizor.getUserReviews("n3") = nil); -- User n3 is not in the system
 		assertTrue(shopAdvizor.getUserReviews("n1") = {}); -- User n1 does not have any reviews
+		assertTrue(shopAdvizor.getProductReviews("p3", "b1") = nil); -- Product p3 does not exist
+		assertTrue(shopAdvizor.getProductReviews("p1", "b3") = nil); -- Brand b3 does not exist
+		assertTrue(shopAdvizor.getProductReviews("p1", "b1") = {|->}); -- Product p3 of brand b3 has no reviews
+		
 		p1.insertReview(u1, mk_Product`Review(1, "fb1")); -- User1 has a review on Product1
 		assertTrue(shopAdvizor.getUserReviews("n1") = { mk_(p1, mk_Product`Review(1, "fb1")) }); 
+		assertTrue(shopAdvizor.getProductReviews("p1", "b1") = { u1 |-> mk_Product`Review(1, "fb1") }); 
 		p1.insertReview(u2, mk_Product`Review(2, "fb2")); -- User2 has a review on Product1
 		assertTrue(shopAdvizor.getUserReviews("n2") = { mk_(p1, mk_Product`Review(2, "fb2")) }); 
+		assertTrue(shopAdvizor.getProductReviews("p1", "b1") = { u1 |-> mk_Product`Review(1, "fb1"), u2 |-> mk_Product`Review(2, "fb2") });
 		p2.insertReview(u1, mk_Product`Review(5, "fb1")); -- User1 has a review on Product1 and Product2
 		assertTrue(shopAdvizor.getUserReviews("n1") = { mk_(p1, mk_Product`Review(1, "fb1")), mk_(p2, mk_Product`Review(5, "fb1")) });
+		assertTrue(shopAdvizor.getProductReviews("p2", "b2") = { u1 |-> mk_Product`Review(5, "fb1") }); 
 	 );
 	 
 	 public testLogin : () ==> ()
@@ -114,7 +126,20 @@ class ShopAdvizorTest
 		shopAdvizor.endActivity("Competitive eating");
 		shopAdvizor.chooseWinner("Competitive eating", "u1");
 		assertTrue(c.m_winner = u1);
-	 );	 
+	 );
+	 
+	 public testIngredients : () ==> ()
+	 testIngredients() ==
+	 (
+	 	dcl shopAdvizor : ShopAdvizor := new ShopAdvizor();
+		dcl b : Brand := new Brand("Oreo");
+		dcl p : Product := new Product("Cookies", "Chocolate cookies", b);
+		p.insertIngredient("milk", mk_Product`Composition(20.0, "ml"));
+		p.insertIngredient("chocolate", mk_Product`Composition(50.0, "g"));
+		p.insertIngredient("sugar", mk_Product`Composition(5.0, "g"));
+		shopAdvizor.insertBrand(b);
+		shopAdvizor.insertProduct(p);
+	 );
 	 
 	 public static main: () ==> ()
 	 main() ==
@@ -122,10 +147,11 @@ class ShopAdvizorTest
 	 	dcl test : ShopAdvizorTest := new ShopAdvizorTest();
 	 	test.testAddProductToRetailer();
 	 	test.testAverageReviewRating();
-	 	test.testUserReviews();
+	 	test.testReviews();
 	 	test.testLogin();
 	 	test.testLowestPrice();
 	 	test.testCompetition();
+	 	test.testIngredients();
 	 );
 	 
 end ShopAdvizorTest
