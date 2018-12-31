@@ -19,10 +19,6 @@ operations
 		m_name := name;
 		return self;
 	);
-
-	-- Returns retailer's name
-	public getName : ()  ==> String
-	getName() == return m_name;
 	
 	--Adds a product and its info (stock and price) to items map
 	public insertProduct : Product * ItemInfo ==> ()

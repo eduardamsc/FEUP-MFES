@@ -19,9 +19,5 @@ class User
 		-- Checks if the password matches
 		public passwordMatches : String ==> bool
 		passwordMatches(password) == return m_password = password;
-			
-		-- Returns user's username
-		public getUsername : ()  ==> String
-		getUsername() == return m_username;
 		
 end User

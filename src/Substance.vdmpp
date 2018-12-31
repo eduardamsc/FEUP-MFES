@@ -16,10 +16,6 @@ operations
 		m_name := name;
 		return self;
 	);
-	
-	-- Returns substance's name
-	public getName : ()  ==> String
-	getName() == return m_name;
 
 functions
 -- TODO Define functiones here

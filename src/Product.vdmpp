@@ -35,26 +35,6 @@ operations
 		m_reviews := { |-> };
 		return self;
 	);
-
-	-- Returns product's id
-	public getId : ()  ==> Id
-	getId() == return m_id;
-
-	-- Returns product's name
-	public getName : ()  ==> String
-	getName() == return m_name;
-
-	-- Returns product's description
-	public getDescription : ()  ==> String
-	getDescription() == return m_description;
-	
-	-- Returns product's brand
-	public getBrand : ()  ==> Brand
-	getBrand() == return m_brand;
-	
-	-- Returns product's reviews
-	public getReviews : ()  ==> set of Review
-	getReviews() == return rng m_reviews;
 	
 	-- Returns the average review rating
 	public getAvgRating : () ==> [real]

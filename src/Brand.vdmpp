@@ -17,10 +17,6 @@ operations
 		return self;
 	);
 
-	-- Returns brand's name
-	public getName : ()  ==> String
-	getName() == return m_name;
-
 functions
 -- TODO Define functiones here
 
