@@ -79,12 +79,16 @@ class ShopAdvizorTest
 	 testLowestPrice() == 
 	 (
 	 	dcl shopAdvizor : ShopAdvizor := new ShopAdvizor();
-		dcl p1 : Product := new Product("p", "pd1", new Brand("b1"));
-		dcl p2 : Product := new Product("p", "pd2", new Brand("b2"));
-		dcl p3 : Product := new Product("p", "pd3", new Brand("b3"));
-		dcl p4 : Product := new Product("p", "pd4", new Brand("b4"));
+	 	dcl b1 : Brand := new Brand("b1");
+	 	dcl b2 : Brand := new Brand("b2");
+		dcl p1 : Product := new Product("p1", "pd1", b1);
+		dcl p2 : Product := new Product("p2", "pd2", b1);
+		dcl p3 : Product := new Product("p1", "pd3", b2);
+		dcl p4 : Product := new Product("p2", "pd4", b2);
 		dcl r1 : Retailer := new Retailer("r1");
 		dcl r2 : Retailer := new Retailer("r2");
+		shopAdvizor.insertBrand(b1);
+		shopAdvizor.insertBrand(b2);
 		shopAdvizor.insertProduct(p1);
 		shopAdvizor.insertProduct(p2);
 		shopAdvizor.insertProduct(p3);

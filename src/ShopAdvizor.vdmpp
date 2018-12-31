@@ -133,7 +133,7 @@ operations
 	(
 		m_products := m_products union {product}
 	)
-	pre product not in set m_products
+	pre product not in set m_products and product.m_brand in set m_brands
 	post m_products = m_products~ union {product};
 	
 	--Adds a user to users set
