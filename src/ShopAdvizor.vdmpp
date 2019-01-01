@@ -98,6 +98,18 @@ operations
 		else return nil;
 	);
 	
+	-- Gets the average rating of a product
+	public getProductAvgRating : String * String ==> [real]
+	getProductAvgRating(product_name, brand_name) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product];
+		if brand = nil then return nil;
+		product := getProduct(product_name, brand);
+		if product = nil then return nil
+		else return product.getAvgRating();
+	);
+	
 	-- Gets all reviews of a product
 	public getProductReviews : String * String ==> [map User to Product`Review]
 	getProductReviews(product_name, brand_name) == 
