@@ -1,5 +1,8 @@
 class ShopAdvizorTest
  instance variables
+ 
+ values
+ 	private admin : User = new User("admin", "admin", <Admin>);
   
  operations
 	 private assertTrue: bool ==> ()
@@ -40,6 +43,8 @@ class ShopAdvizorTest
 		dcl p2 : Product := new Product("p2", "pd2", b2);
 		dcl u1 : User := new User("n1", "np1");
 		dcl u2 : User := new User("n2", "np2");
+		shopAdvizor.insertUser(admin);
+		assertTrue(shopAdvizor.login("admin", "admin") = admin);
 		shopAdvizor.insertBrand(b1);
 		shopAdvizor.insertBrand(b2);
 		shopAdvizor.insertProduct(p1);
@@ -73,6 +78,7 @@ class ShopAdvizorTest
 			assertTrue(shopAdvizor.login("user", "123") = nil);
 			assertTrue(shopAdvizor.login("123", "pass") = nil);
 			assertTrue(shopAdvizor.login("user", "pass") = u1);
+			shopAdvizor.logout();
 	 );
 	 
 	 public testLowestPrice : () ==> ()
@@ -87,6 +93,8 @@ class ShopAdvizorTest
 		dcl p4 : Product := new Product("p2", "pd4", b2);
 		dcl r1 : Retailer := new Retailer("r1");
 		dcl r2 : Retailer := new Retailer("r2");
+		shopAdvizor.insertUser(admin);
+		assertTrue(shopAdvizor.login("admin", "admin") = admin);
 		shopAdvizor.insertBrand(b1);
 		shopAdvizor.insertBrand(b2);
 		shopAdvizor.insertProduct(p1);
@@ -110,11 +118,15 @@ class ShopAdvizorTest
 		dcl u1 : User := new User("u1", "p1");
 		dcl u2 : User := new User("u2", "p2");
 		dcl u3 : User := new User("u3", "p3");
+		dcl bu : User := new User("Oreo", "oreo_pass", <Brand>);
 		dcl b : Brand := new Brand("Oreo");
 		dcl b2 : Brand := new Brand("ChipMix");
 		dcl c : Competition := new Competition("Competitive eating", "Eat as much cookies as possible", 20.0, b);
 		dcl c2 : Competition := new Competition("Biggest buyer", "Buy the biggest ammount of cookies", 100.0, b2);
 		assertTrue(shopAdvizor.getActivity("Competitive eating") = nil);
+		shopAdvizor.insertUser(admin);
+		shopAdvizor.insertUser(bu); -- Oreo brand user
+		assertTrue(shopAdvizor.login("admin", "admin") = admin); -- Admin has all permissions
 		shopAdvizor.insertBrand(b);
 		shopAdvizor.insertBrand(b2);
 		shopAdvizor.insertUser(u1);
@@ -122,10 +134,22 @@ class ShopAdvizorTest
 		shopAdvizor.insertUser(u3);
 		shopAdvizor.insertActivity(c);
 		shopAdvizor.insertActivity(c2);
+		
+		-- Users can only enter themselves in the competition
+		shopAdvizor.logout();
+		assertTrue(shopAdvizor.login("u1","p1") = u1);
 		shopAdvizor.addCompetitor("Competitive eating", "u1");
+		shopAdvizor.logout();
+		assertTrue(shopAdvizor.login("u2","p2") = u2);
 		shopAdvizor.addCompetitor("Competitive eating", "u2");
+		shopAdvizor.logout();
+		assertTrue(shopAdvizor.login("u3","p3") = u3);
 		shopAdvizor.addCompetitor("Competitive eating", "u3");
 		assertTrue(c.m_competitors = {u1, u2, u3});
+		
+		-- The brand user can start, end and choose the winner of a competition
+		shopAdvizor.logout();
+		assertTrue(shopAdvizor.login("Oreo","oreo_pass") = bu);
 		shopAdvizor.startActivity("Competitive eating");
 		shopAdvizor.endActivity("Competitive eating");
 		shopAdvizor.chooseWinner("Competitive eating", "u1");
@@ -141,6 +165,8 @@ class ShopAdvizorTest
 		p.insertIngredient("milk", mk_Product`Composition(20.0, "ml"));
 		p.insertIngredient("chocolate", mk_Product`Composition(50.0, "g"));
 		p.insertIngredient("sugar", mk_Product`Composition(5.0, "g"));
+		shopAdvizor.insertUser(admin);
+		assertTrue(shopAdvizor.login("admin", "admin") = admin);
 		shopAdvizor.insertBrand(b);
 		shopAdvizor.insertProduct(p);
 	 );

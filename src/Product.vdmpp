@@ -70,9 +70,7 @@ operations
 	post m_ingredients = m_ingredients~ ++ {ingredient |-> composition};
 
 functions
--- TODO Define functiones here
 
 traces
--- TODO Define Combinatorial Test Traces here
 
 end Product

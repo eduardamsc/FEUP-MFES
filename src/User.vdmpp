@@ -1,9 +1,11 @@
 class User
 	types
 		public String = seq1 of char;
+		public Type = <Normal> | <Retailer> | <Brand> | <Admin>
 	
 	instance variables
 		public m_username: String;
+		public m_type: Type;
 		private m_password: String;
 	
 	operations
@@ -13,6 +15,17 @@ class User
 		(
 			m_username := username;
 			m_password := password;
+			m_type := <Normal>;
+			return self;
+		);
+		
+		-- User constructor
+		public User : String * String * Type ==> User
+		User(username, password, type) ==
+		(
+			m_username := username;
+			m_password := password;
+			m_type := type;
 			return self;
 		);
 		

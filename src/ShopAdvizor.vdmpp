@@ -10,12 +10,14 @@ instance variables
 	public m_retailers: set of Retailer;
 	public m_brands: set of Brand;
 	public m_activities: set of Activity;
+	private m_user: [User];
 	
 	inv forall b1, b2 in set m_brands & b1 <> b2 => b1.m_name <> b2.m_name;
 	inv forall r1, r2 in set m_retailers & r1 <> r2 => r1.m_name <> r2.m_name;
 	inv forall u1, u2 in set m_users & u1 <> u2 => u1.m_username <> u2.m_username;
 	inv forall p1, p2 in set m_products & p1 <> p2 => p1.m_name <> p2.m_name or p1.m_brand <> p2.m_brand;
 	inv forall a1, a2 in set m_activities & a1 <> a2 => a1.m_title <> a2.m_title;
+	inv m_user = nil or m_user in set m_users;
 	
 operations
 	-- ShopAdvizor constructor
@@ -27,6 +29,7 @@ operations
 		m_retailers := {};
 		m_brands := {};
 		m_activities := {};
+		m_user := nil;
 		return self;
 	);
 	
@@ -131,6 +134,8 @@ operations
 	public insertProduct : Product ==> ()
 	insertProduct(product) ==
 	(
+		requireUserToBe(<Brand>);
+		requireSameUsername(product.m_brand.m_name);
 		m_products := m_products union {product}
 	)
 	pre product not in set m_products and product.m_brand in set m_brands
@@ -149,6 +154,8 @@ operations
 	public insertRetailer : Retailer ==> ()
 	insertRetailer(retailer) ==
 	(
+		requireUserToBe(<Retailer>);
+		requireSameUsername(retailer.m_name);
 		m_retailers := m_retailers union {retailer}
 	)
 	pre retailer not in set m_retailers
@@ -158,6 +165,8 @@ operations
 	public insertActivity : Activity ==> ()
 	insertActivity(activity) ==
 	(
+		requireUserToBe(<Brand>);
+		requireSameUsername(activity.m_brand.m_name);
 		m_activities := m_activities union {activity}
 	)
 	pre activity not in set m_activities
@@ -167,6 +176,8 @@ operations
 	public insertBrand : Brand ==> ()
 	insertBrand(brand) ==
 	(
+		requireUserToBe(<Brand>);
+		requireSameUsername(brand.m_name);
 		m_brands := m_brands union {brand}
 	)
 	pre brand not in set m_brands
@@ -177,17 +188,45 @@ operations
 	login(username, password) == 
 	(
 		if exists1 u in set m_users & u.m_username = username and u.passwordMatches(password)
-			then return iota u in set m_users & u.m_username = username and u.passwordMatches(password)
+			then ( 
+				m_user := iota u in set m_users & u.m_username = username and u.passwordMatches(password);
+				return m_user;
+			)
 		else return nil;
-	);
+	)
+	pre m_user = nil
+	post (RESULT <> nil and m_user <> nil) or (RESULT = nil and m_user = nil);
+	
+	--Logout
+	public logout : () ==> ()
+	logout() == 
+	(
+		m_user := nil;
+	)
+	pre m_user <> nil
+	post m_user = nil;
+	
+	-- Enforce user permissions
+	private requireUserToBe : User`Type ==> ()
+	requireUserToBe(type) == return
+	pre m_user <> nil and m_user.m_type = type or m_user.m_type = <Admin>;
+	
+	-- Enforce same username
+	private requireSameUsername : String ==> ()
+	requireSameUsername(name) == return
+	pre m_user <> nil and m_user.m_username = name or m_user.m_type = <Admin>;
 	
 	-- Start activity
 	public startActivity : String ==> ()
 	startActivity(title) == 
 	(	
 		dcl activity : [Activity] := getActivity(title);
+		requireUserToBe(<Brand>);
 		if activity <> nil
-			then activity.startActivity()
+			then (
+				requireSameUsername(activity.m_brand.m_name);
+				activity.startActivity();
+			)
 	);
 	
 	-- End activity
@@ -195,8 +234,12 @@ operations
 	endActivity(title) == 
 	(	
 		dcl activity : [Activity] := getActivity(title);
+		requireUserToBe(<Brand>);
 		if activity <> nil
-			then activity.endActivity()
+			then (
+				requireSameUsername(activity.m_brand.m_name);		
+				activity.endActivity();
+			)
 	);
 	
 	-- Add competitor to competition
@@ -205,8 +248,12 @@ operations
 	(	
 		dcl activity : [Competition] := getActivity(title);
 		dcl user : [User] := getUser(username);
+		requireUserToBe(<Normal>);
 		if user <> nil and activity <> nil and isofclass(Competition, activity)
-			then activity.addCompetitor(user)
+			then (
+				requireSameUsername(user.m_username);
+				activity.addCompetitor(user);
+			)
 	);
 	
 	-- Choose winner of a competition
@@ -215,12 +262,16 @@ operations
 	(	
 		dcl activity : [Competition] := getActivity(title);
 		dcl user : [User] := getUser(username);
+		requireUserToBe(<Brand>);
 		if user <> nil and activity <> nil and isofclass(Competition, activity)
-			then activity.chooseWinner(user)
+			then (
+				requireSameUsername(activity.m_brand.m_name);
+				activity.chooseWinner(user);
+			)
 	);
 	
 functions
-
+	
 traces
 
 end ShopAdvizor
