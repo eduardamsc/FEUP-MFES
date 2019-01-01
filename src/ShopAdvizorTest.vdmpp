@@ -12,12 +12,24 @@ class ShopAdvizorTest
 	 public testAddProductToRetailer: () ==> ()
 	 testAddProductToRetailer() ==
 	 (
+	 	dcl shopAdvizor : ShopAdvizor := new ShopAdvizor();
 	 	dcl brand : Brand := new Brand("Chip Mix");
 	 	dcl product : Product := new Product("Bolachas", "Bolachas de Chocolate", brand);
 	 	dcl info : Retailer`ItemInfo := mk_Retailer`ItemInfo(20, 2.1);
 	 	dcl retailer : Retailer := new Retailer("Pingo Doce");
-	 	retailer.insertProduct(product, info);
-	 	assertTrue(retailer.m_items = {product |-> info});
+	 	dcl user : User := new User("Pingo Doce", "pingo_doce", <Retailer>);
+		shopAdvizor.insertUser(admin);
+		assertTrue(shopAdvizor.login("admin", "admin") = admin);
+	 	shopAdvizor.insertUser(user);
+	 	shopAdvizor.insertBrand(brand);
+	 	shopAdvizor.insertProduct(product);
+	 	shopAdvizor.insertRetailer(retailer);
+	 	shopAdvizor.logout();
+	 	assertTrue(shopAdvizor.login("Pingo Doce", "pingo_doce") = user);
+	 	assertTrue(shopAdvizor.insertProductToRetailer("Pingo Azedo", "Bolachas", "Chip Mix", info.stock, info.price) = nil);
+	 	assertTrue(shopAdvizor.insertProductToRetailer("Pingo Doce", "Bolachas", "Oreo", info.stock, info.price) = nil);
+	 	assertTrue(shopAdvizor.insertProductToRetailer("Pingo Doce", "Detergente da Roupa", "Chip Mix", info.stock, info.price) = nil);
+	 	assertTrue(shopAdvizor.insertProductToRetailer("Pingo Doce", "Bolachas", "Chip Mix", info.stock, info.price) = {product |-> info});
 	 );
 	 
 	 public testAverageReviewRating : () ==> ()

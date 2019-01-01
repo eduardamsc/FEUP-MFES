@@ -46,6 +46,19 @@ operations
 		else return nil;
 	);
 	
+	-- Get retailer by name
+	public getRetailer : String ==> [Retailer]
+	getRetailer(name) == 
+	(	
+		dcl retailer : Retailer;
+		if exists1 r in set m_retailers & r.m_name = name
+		then (
+			retailer := iota r in set m_retailers & r.m_name = name;
+			return retailer;
+		)
+		else return nil;
+	);
+	
 	-- Get user by name
 	public getUser : String ==> [User]
 	getUser(name) == 
@@ -182,6 +195,24 @@ operations
 	)
 	pre brand not in set m_brands
 	post m_brands = m_brands~ union {brand};
+	
+	-- Adds a product to a retailer
+	public insertProductToRetailer : String * String * String * int * rat ==> [ map Product to Retailer`ItemInfo]
+	insertProductToRetailer(retailer_name, product_name, brand_name, stock, price) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl retailer: [Retailer] := getRetailer(retailer_name);
+		dcl product : [Product];
+		requireUserToBe(<Retailer>);
+		if brand = nil then return nil;
+		product := getProduct(product_name, brand);
+		if product = nil or retailer = nil then return nil
+		else (
+			requireSameUsername(retailer.m_name);
+			retailer.insertProduct(product, mk_Retailer`ItemInfo(stock, price));
+			return retailer.m_items;
+		)
+	);
 	
 	--Login
 	public login : String * String ==> [User]
