@@ -110,6 +110,22 @@ operations
 		else return product.getAvgRating();
 	);
 	
+	-- Insert a user review on a product
+	public insertReview : String * String * nat1 * String ==> bool
+	insertReview(product_name, brand_name, rating, feedback) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product];
+		requireUserToBe(<Normal>);
+		if brand = nil then return false;
+		product := getProduct(product_name, brand);
+		if product = nil then return false
+		else (
+			product.insertReview(m_user, mk_Product`Review(rating, feedback));
+			return true;
+		)
+	);
+	
 	-- Gets all reviews of a product
 	public getProductReviews : String * String ==> [map User to Product`Review]
 	getProductReviews(product_name, brand_name) == 
@@ -286,17 +302,13 @@ operations
 	);
 	
 	-- Add competitor to competition
-	public addCompetitor : String * String ==> ()
-	addCompetitor(title, username) == 
+	public addCompetitor : String ==> ()
+	addCompetitor(title) == 
 	(	
 		dcl activity : [Competition] := getActivity(title);
-		dcl user : [User] := getUser(username);
 		requireUserToBe(<Normal>);
-		if user <> nil and activity <> nil and isofclass(Competition, activity)
-			then (
-				requireSameUsername(user.m_username);
-				activity.addCompetitor(user);
-			)
+		if activity <> nil and isofclass(Competition, activity)
+			then activity.addCompetitor(m_user);
 	);
 	
 	-- Choose winner of a competition

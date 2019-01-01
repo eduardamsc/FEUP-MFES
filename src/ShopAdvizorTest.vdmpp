@@ -38,7 +38,11 @@ class ShopAdvizorTest
 	 	dcl shopAdvizor : ShopAdvizor := new ShopAdvizor();
 	 	dcl brand : Brand := new Brand("Chip Mix");
 	 	dcl product : Product := new Product("Bolachas", "Bolachas de Chocolate", brand);
+	 	dcl u1 : User := new User("u1", "p1");
+	 	dcl u2 : User := new User("u2", "p2");
 		shopAdvizor.insertUser(admin);
+		shopAdvizor.insertUser(u1);
+		shopAdvizor.insertUser(u2);
 		assertTrue(shopAdvizor.login("admin", "admin") = admin);
 		
 	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = nil);
@@ -46,11 +50,17 @@ class ShopAdvizorTest
 	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = nil);
 		shopAdvizor.insertProduct(product);
 	 	
+	 	shopAdvizor.logout();
 	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = nil);
-	 	product.insertReview(new User("name","pass"), mk_Product`Review(1, "mau"));
-	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = 1);
-	 	product.insertReview(new User("name2","pass2"), mk_Product`Review(4, "bom"));
-	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = 2.5);	 	
+		assertTrue(shopAdvizor.login("u1", "p1") = u1); -- Insert review with user u1
+	 	assertTrue(shopAdvizor.insertReview("Bolachas", "Oreos", 1, "mau") = false); -- Oreos does not exist
+	 	assertTrue(shopAdvizor.insertReview("Bolachas", "Chip Mix", 1, "mau") = true);
+	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = 1); -- Average of {1} = 1
+	 	shopAdvizor.logout();
+	 	assertTrue(shopAdvizor.login("u2", "p2") = u2); -- Insert review with user u2
+	 	assertTrue(shopAdvizor.insertReview("Ketchup", "Chip Mix", 1, "mau") = false); -- Chip Mix does not sell Ketchup
+	 	assertTrue(shopAdvizor.insertReview("Bolachas", "Chip Mix", 4, "bom") = true);
+	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = 2.5); -- Average of {1, 4} = 2.5
 	 );
 	 
 	 public testReviews : () ==> ()
@@ -158,13 +168,13 @@ class ShopAdvizorTest
 		-- Users can only enter themselves in the competition
 		shopAdvizor.logout();
 		assertTrue(shopAdvizor.login("u1","p1") = u1);
-		shopAdvizor.addCompetitor("Competitive eating", "u1");
+		shopAdvizor.addCompetitor("Competitive eating");
 		shopAdvizor.logout();
 		assertTrue(shopAdvizor.login("u2","p2") = u2);
-		shopAdvizor.addCompetitor("Competitive eating", "u2");
+		shopAdvizor.addCompetitor("Competitive eating");
 		shopAdvizor.logout();
 		assertTrue(shopAdvizor.login("u3","p3") = u3);
-		shopAdvizor.addCompetitor("Competitive eating", "u3");
+		shopAdvizor.addCompetitor("Competitive eating");
 		assertTrue(c.m_competitors = {u1, u2, u3});
 		
 		-- The brand user can start, end and choose the winner of a competition
