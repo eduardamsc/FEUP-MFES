@@ -153,6 +153,14 @@ operations
 		if product = nil then return nil
 		else return product.m_reviews
 	);
+
+	-- Gets all reviews given by the logged in user
+	public getUserReviews : () ==> [set of (Product * Product`Review)]
+	getUserReviews() == 
+	(	
+		return getUserReviews(m_user.m_username);
+	)
+	pre m_user <> nil;
 	
 	-- Gets all reviews given by a user
 	public getUserReviews : String ==> [set of (Product * Product`Review)]

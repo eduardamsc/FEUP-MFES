@@ -1,10 +1,7 @@
 package ShopAdvizor;
 
 import java.util.*;
-
 import org.overture.codegen.runtime.*;
-
-import Quotes.*;
 
 @SuppressWarnings("all")
 public class ShopAdvizorTest {
@@ -81,6 +78,10 @@ public class ShopAdvizorTest {
     assertTrue(Utils.equals(shopAdvizor.insertReview("Ketchup", "Chip Mix", 1L, "mau"), false));
     assertTrue(Utils.equals(shopAdvizor.insertReview("Bolachas", "Chip Mix", 4L, "bom"), true));
     assertTrue(Utils.equals(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix"), 2.5));
+    assertTrue(Utils.equals(shopAdvizor.removeReview("Bolachas", "Oreos"), false));
+    assertTrue(Utils.equals(shopAdvizor.removeReview("Ketchup", "Chip Mix"), false));
+    assertTrue(Utils.equals(shopAdvizor.removeReview("Bolachas", "Chip Mix"), true));
+    assertTrue(Utils.equals(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix"), 1L));
   }
 
   public void testReviews() {
@@ -136,6 +137,11 @@ public class ShopAdvizorTest {
         Utils.equals(
             shopAdvizor.getProductReviews("p2", "b2"),
             MapUtil.map(new Maplet(u1, new Product.Review(5L, "fb1")))));
+    p2.removeReview(u1);
+    assertTrue(Utils.empty(shopAdvizor.getProductReviews("p2", "b2")));
+    shopAdvizor.logout();
+    assertTrue(Utils.equals(shopAdvizor.login("n1", "np1"), u1));
+    assertTrue(Utils.equals(shopAdvizor.getUserReviews(), shopAdvizor.getUserReviews("n1")));
   }
 
   public void testLogin() {

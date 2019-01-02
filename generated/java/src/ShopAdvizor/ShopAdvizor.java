@@ -289,6 +289,25 @@ public class ShopAdvizor {
     }
   }
 
+  public Boolean removeReview(final String product_name, final String brand_name) {
+
+    Brand brand = getBrand(brand_name);
+    Product product = null;
+    requireUserToBe(Quotes.NormalQuote.getInstance());
+    if (Utils.equals(brand, null)) {
+      return false;
+    }
+
+    product = getProduct(product_name, brand);
+    if (Utils.equals(product, null)) {
+      return false;
+
+    } else {
+      product.removeReview(m_user);
+      return true;
+    }
+  }
+
   public VDMMap getProductReviews(final String product_name, final String brand_name) {
 
     Brand brand = getBrand(brand_name);
@@ -304,6 +323,11 @@ public class ShopAdvizor {
     } else {
       return product.m_reviews;
     }
+  }
+
+  public VDMSet getUserReviews() {
+
+    return getUserReviews(m_user.m_username);
   }
 
   public VDMSet getUserReviews(final String username) {

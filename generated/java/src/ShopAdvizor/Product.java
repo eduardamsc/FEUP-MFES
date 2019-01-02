@@ -54,6 +54,11 @@ public class Product {
         MapUtil.override(Utils.copy(m_reviews), MapUtil.map(new Maplet(user, Utils.copy(review))));
   }
 
+  public void removeReview(final User user) {
+
+    m_reviews = MapUtil.domResBy(SetUtil.set(user), Utils.copy(m_reviews));
+  }
+
   public void insertIngredient(final String ingredient, final Composition composition) {
 
     m_ingredients =

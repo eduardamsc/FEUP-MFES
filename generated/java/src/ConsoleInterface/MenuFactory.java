@@ -21,6 +21,24 @@ public class MenuFactory {
 						 new String[][] { {}, {}, {}, {} });
 	}
 	
+	public static Menu userMenu() {
+		return new Menu( new String[] { "Sign out", "My Reviews" }, 
+				 new String[] { "logout", "user_reviews" },
+				 new String[][] { {}, {} });
+	}
+	
+	public static Menu productMenu() {
+		return null;
+	}
+	
+	public static Menu brandMenu() {
+		return null;
+	}
+	
+	public static Menu retailerMenu() {
+		return null;
+	}
+	
 	public static void call(String callback, String[] args) {
 		Menu next_menu = menu;
 		switch (callback) {
@@ -39,6 +57,31 @@ public class MenuFactory {
 			next_menu = mainMenu();
 			break;
 		}
+		case "user_menu": {
+			next_menu = userMenu();
+			break;
+		}
+		case "product_menu": {
+			next_menu = productMenu();
+			break;
+		}
+		case "brand_menu": {
+			next_menu = brandMenu();
+			break;
+		}
+		case "retailer_menu": {
+			next_menu = retailerMenu();
+			break;
+		}
+		case "logout": {
+			shopAdvizor.logout();
+			next_menu = authMenu();
+			break;
+		}
+		case "user_reviews": {
+			PrintFactory.printUserReviews(shopAdvizor.getUserReviews());
+			break;
+		}
 		default: break;
 		}
 		menu = next_menu;
@@ -54,7 +97,24 @@ public class MenuFactory {
 		System.out.println("Error: " + msg);
 	}
 	
+	public static void populate() {
+		shopAdvizor.insertUser(new User("admin", "admin", Quotes.AdminQuote.getInstance()));
+		shopAdvizor.insertUser(new User("user1", "pass1"));
+		shopAdvizor.login("admin", "admin");
+		String[] brands = new String[] { "Oreo", "Chip Mix" };
+		for(String b : brands) {
+			Brand brand = new Brand(b);
+			shopAdvizor.insertBrand(brand);
+			shopAdvizor.insertProduct(new Product("Bolachas", "Bolachas de chocolate", brand));
+		}
+		shopAdvizor.logout();
+		shopAdvizor.login("user1", "pass1");
+		shopAdvizor.insertReview("Bolachas", "Oreo", 5, "Muito boas!");
+		shopAdvizor.logout();
+	}
+	
 	public static void main(String[] args) {
+		MenuFactory.populate();
 		MenuFactory.run();
 	}
 }

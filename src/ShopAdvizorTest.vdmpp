@@ -104,7 +104,11 @@ class ShopAdvizorTest
 		assertTrue(shopAdvizor.getUserReviews("n1") = { mk_(p1, mk_Product`Review(1, "fb1")), mk_(p2, mk_Product`Review(5, "fb1")) });
 		assertTrue(shopAdvizor.getProductReviews("p2", "b2") = { u1 |-> mk_Product`Review(5, "fb1") }); 
 		p2.removeReview(u1);
-		assertTrue(shopAdvizor.getProductReviews("p2", "b2") = {|->}); 
+		assertTrue(shopAdvizor.getProductReviews("p2", "b2") = {|->});
+		
+		shopAdvizor.logout();
+		assertTrue(shopAdvizor.login("n1","np1") = u1);
+		assertTrue(shopAdvizor.getUserReviews() = shopAdvizor.getUserReviews("n1"));
 	 );
 	 
 	 public testLogin : () ==> ()
