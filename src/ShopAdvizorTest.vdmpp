@@ -97,6 +97,8 @@ class ShopAdvizorTest
 		p2.insertReview(u1, mk_Product`Review(5, "fb1")); -- User1 has a review on Product1 and Product2
 		assertTrue(shopAdvizor.getUserReviews("n1") = { mk_(p1, mk_Product`Review(1, "fb1")), mk_(p2, mk_Product`Review(5, "fb1")) });
 		assertTrue(shopAdvizor.getProductReviews("p2", "b2") = { u1 |-> mk_Product`Review(5, "fb1") }); 
+		p2.removeReview(u1);
+		assertTrue(shopAdvizor.getProductReviews("p2", "b2") = {|->}); 
 	 );
 	 
 	 public testLogin : () ==> ()

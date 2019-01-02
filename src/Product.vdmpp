@@ -60,6 +60,15 @@ operations
 	pre user not in set dom m_reviews
 	post m_reviews = m_reviews~ ++ {user |-> review};
 	
+	--Removes a review from the reviews map
+	public removeReview : User ==> ()
+	removeReview(user) ==
+	(
+		m_reviews := {user} <-: m_reviews
+	)
+	pre user in set dom m_reviews
+	post {user} <: m_reviews = {|->};
+	
 	--Adds an igredient and its quantity and unit to ingredients map
 	public insertIngredient : Substance * Composition ==> ()
 	insertIngredient(ingredient, composition) ==
