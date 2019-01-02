@@ -28,7 +28,9 @@ public class MenuFactory {
 	}
 	
 	public static Menu productMenu() {
-		return null;
+		return new Menu( new String[] { "Search" }, 
+				 new String[] { "search_product" },
+				 new String[][] { {"product name", "brand name"} });
 	}
 	
 	public static Menu brandMenu() {
@@ -82,6 +84,16 @@ public class MenuFactory {
 			PrintFactory.printUserReviews(shopAdvizor.getUserReviews());
 			break;
 		}
+		case "search_product": {
+			Brand brand = shopAdvizor.getBrand(args[1]);
+			Product product = shopAdvizor.getProduct(args[0], brand);
+			PrintFactory.printProduct(product);
+			System.out.println("Average Rating: " + shopAdvizor.getProductAvgRating(args[0], args[1]) + "/5");
+			PrintFactory.printLowestPrice(shopAdvizor.getLowestPriceRetailer(product));
+			PrintFactory.printProductReviews(shopAdvizor.getProductReviews(args[0], args[1]));
+			System.out.println();
+			break;
+		}
 		default: break;
 		}
 		menu = next_menu;
@@ -107,6 +119,8 @@ public class MenuFactory {
 			shopAdvizor.insertBrand(brand);
 			shopAdvizor.insertProduct(new Product("Bolachas", "Bolachas de chocolate", brand));
 		}
+		shopAdvizor.insertRetailer(new Retailer("Pingo Doce"));
+		shopAdvizor.insertProductToRetailer("Pingo Doce", "Bolachas", "Oreo", 20, 5.0);
 		shopAdvizor.logout();
 		shopAdvizor.login("user1", "pass1");
 		shopAdvizor.insertReview("Bolachas", "Oreo", 5, "Muito boas!");
