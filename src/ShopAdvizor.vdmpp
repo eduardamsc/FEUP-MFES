@@ -305,23 +305,29 @@ operations
 	public addCompetitor : String ==> ()
 	addCompetitor(title) == 
 	(	
-		dcl activity : [Competition] := getActivity(title);
+		dcl activity : [Activity] := getActivity(title);
+		dcl competition : Competition;
 		requireUserToBe(<Normal>);
 		if activity <> nil and isofclass(Competition, activity)
-			then activity.addCompetitor(m_user);
+			then (
+				competition := narrow_(activity, Competition);
+				competition.addCompetitor(m_user)
+			);
 	);
 	
 	-- Choose winner of a competition
 	public chooseWinner : String * String ==> ()
 	chooseWinner(title, username) == 
 	(	
-		dcl activity : [Competition] := getActivity(title);
+		dcl activity : [Activity] := getActivity(title);
+		dcl competition : Competition;
 		dcl user : [User] := getUser(username);
 		requireUserToBe(<Brand>);
 		if user <> nil and activity <> nil and isofclass(Competition, activity)
 			then (
 				requireSameUsername(activity.m_brand.m_name);
-				activity.chooseWinner(user);
+				competition := narrow_(activity, Competition);
+				competition.chooseWinner(user);
 			)
 	);
 	
