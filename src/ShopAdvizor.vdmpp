@@ -126,6 +126,22 @@ operations
 		)
 	);
 	
+	-- Remove a user review on a product
+	public removeReview : String * String ==> bool
+	removeReview(product_name, brand_name) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product];
+		requireUserToBe(<Normal>);
+		if brand = nil then return false;
+		product := getProduct(product_name, brand);
+		if product = nil then return false
+		else (
+			product.removeReview(m_user);
+			return true;
+		)
+	);
+	
 	-- Gets all reviews of a product
 	public getProductReviews : String * String ==> [map User to Product`Review]
 	getProductReviews(product_name, brand_name) == 

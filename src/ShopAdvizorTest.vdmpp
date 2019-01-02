@@ -61,6 +61,12 @@ class ShopAdvizorTest
 	 	assertTrue(shopAdvizor.insertReview("Ketchup", "Chip Mix", 1, "mau") = false); -- Chip Mix does not sell Ketchup
 	 	assertTrue(shopAdvizor.insertReview("Bolachas", "Chip Mix", 4, "bom") = true);
 	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = 2.5); -- Average of {1, 4} = 2.5
+	 	
+	 	-- Remove review
+	 	assertTrue(shopAdvizor.removeReview("Bolachas", "Oreos") = false); -- Oreos does not exist
+	 	assertTrue(shopAdvizor.removeReview("Ketchup", "Chip Mix") = false); -- Chip Mix does not sell Ketchup
+	 	assertTrue(shopAdvizor.removeReview("Bolachas", "Chip Mix") = true); -- Remove review of user u2
+	 	assertTrue(shopAdvizor.getProductAvgRating("Bolachas", "Chip Mix") = 1); -- Average of {1} = 1
 	 );
 	 
 	 public testReviews : () ==> ()
