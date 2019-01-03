@@ -5,11 +5,13 @@ public class Menu {
 	public String[] m_options;
 	public String[] m_callbacks;
 	public String[][] m_inputs;
+	public Menu m_back;
 		
-	public Menu(String[] options, String[] callbacks, String[][] inputs) {
+	public Menu(String[] options, String[] callbacks, String[][] inputs, Menu back) {
 		m_options = options;
 		m_callbacks = callbacks;
 		m_inputs = inputs;
+		m_back = back;
 	}
 	
 	public String toString() {

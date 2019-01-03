@@ -12,43 +12,50 @@ public class MenuFactory {
 	public static Menu authMenu() {
 		return new Menu( new String[] { "Sign in", "Sign up", "Continue as guest" }, 
 						 new String[] { "login", "insertUser", "guest" },
-						 new String[][] { {"username", "password" }, {"username", "password"}, {} });
+						 new String[][] { {"username", "password" }, {"username", "password"}, {} },
+						 null);
 	}
 	
 	public static Menu mainMenu() {
 		return new Menu( new String[] { "User menu", "Product menu", "Brand menu", "Retailer menu", "Competition menu" },
 						 new String[] { "user_menu", "product_menu", "brand_menu", "retailer_menu", "competition_menu" },
-						 new String[][] { {}, {}, {}, {}, {} });
+						 new String[][] { {}, {}, {}, {}, {} },
+						 null);
 	}
 	
 	public static Menu userMenu() {
-		return new Menu( new String[] { "Sign out", "My Reviews" }, 
-				 new String[] { "logout", "user_reviews" },
-				 new String[][] { {}, {} });
+		return new Menu( new String[] { "Sign out", "My Reviews", "Back" }, 
+				 new String[] { "logout", "user_reviews", "back" },
+				 new String[][] { {}, {}, {} },
+				 mainMenu());
 	}
 	
 	public static Menu productMenu() {
-		return new Menu( new String[] { "Search", "List products", "Insert product", "Review product", "Remove review" }, 
-				 new String[] { "search_product", "list_products", "insert_product", "insert_review", "remove_review" },
-				 new String[][] { {"product name", "brand name"}, {}, {"product name", "product description", "brand name"}, {"product name", "brand name", "rating", "feeback"}, {"product name", "brand name"} });
+		return new Menu( new String[] { "Search", "List products", "Insert product", "Review product", "Remove review", "Back" }, 
+				 new String[] { "search_product", "list_products", "insert_product", "insert_review", "remove_review", "back" },
+				 new String[][] { {"product name", "brand name"}, {}, {"product name", "product description", "brand name"}, {"product name", "brand name", "rating", "feeback"}, {"product name", "brand name"}, {} },
+				 mainMenu());
 	}
 	
 	public static Menu brandMenu() {
-		return new Menu( new String[] { "Search", "List brands", "Insert brand" }, 
-				 new String[] { "search_brands", "list_brands", "insert_brand" },
-				 new String[][] { {"brand name"}, {}, {"brand name"} });
+		return new Menu( new String[] { "Search", "List brands", "Insert brand", "Back" }, 
+				 new String[] { "search_brands", "list_brands", "insert_brand", "back" },
+				 new String[][] { {"brand name"}, {}, {"brand name"}, {} },
+				 mainMenu());
 	}
 	
 	public static Menu retailerMenu() {
-		return new Menu( new String[] { "Search", "List retailers", "Insert retailer", "Insert product on Retailer" }, 
-				 new String[] { "search_retailers", "list_retailers", "insert_retailer", "insert_product_retailer" },
-				 new String[][] { {"retailer name"}, {}, {"retailer name"}, {"retailer name", "product name", "brand name", "stock", "price"} });
+		return new Menu( new String[] { "Search", "List retailers", "Insert retailer", "Insert product on Retailer", "Back" }, 
+				 new String[] { "search_retailers", "list_retailers", "insert_retailer", "insert_product_retailer", "back" },
+				 new String[][] { {"retailer name"}, {}, {"retailer name"}, {"retailer name", "product name", "brand name", "stock", "price"}, {} },
+				 mainMenu());
 	}
 	
 	public static Menu competitionMenu() {
-		return new Menu( new String[] { "Search", "List competitions", "Create competition", "Compete", "Start competition", "End competition", "Choose winner" }, 
-				 new String[] { "search_competitions", "list_competitions", "insert_competitions", "add_competitor", "start_competition", "end_competition", "choose_winner" },
-				 new String[][] { {"competition title"}, {}, {"competition title", "competition description", "competition prize", "competition brand"}, {"competition title"}, {"competition title"}, {"competition title"}, {"competition title", "competition winner username"}});
+		return new Menu( new String[] { "Search", "List competitions", "Create competition", "Compete", "Start competition", "End competition", "Choose winner", "Back" }, 
+				 new String[] { "search_competitions", "list_competitions", "insert_competitions", "add_competitor", "start_competition", "end_competition", "choose_winner", "back" },
+				 new String[][] { {"competition title"}, {}, {"competition title", "competition description", "competition prize", "competition brand"}, {"competition title"}, {"competition title"}, {"competition title"}, {"competition title", "competition winner username"}, {}},
+				 mainMenu());
 	}
 	
 	public static void call(String callback, String[] args) {
@@ -67,6 +74,10 @@ public class MenuFactory {
 		}
 		case "guest": {
 			next_menu = mainMenu();
+			break;
+		}
+		case "back": {
+			next_menu = menu.m_back;
 			break;
 		}
 		case "user_menu": {
