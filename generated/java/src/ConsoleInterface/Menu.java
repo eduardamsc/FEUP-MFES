@@ -39,7 +39,12 @@ public class Menu {
 	public int getMenuOption() {
 		int option = -1;
 		do {
-			option = Integer.parseInt(MenuFactory.scanner.nextLine());
+			String line = MenuFactory.scanner.nextLine();
+			try {
+				option = Integer.parseInt(line);
+			} catch(Exception e) {
+				continue;
+			}
 		} while( option < 0 || option >= m_options.length);
 		return option;
 	}

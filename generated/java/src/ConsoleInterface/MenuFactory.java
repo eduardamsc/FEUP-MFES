@@ -1,5 +1,6 @@
 package ConsoleInterface;
 
+import java.util.Map;
 import java.util.Scanner;
 
 import ShopAdvizor.*;
@@ -40,7 +41,9 @@ public class MenuFactory {
 	}
 	
 	public static Menu retailerMenu() {
-		return null;
+		return new Menu( new String[] { "Search", "List retailers", "Insert retailer", "Insert product on Retailer" }, 
+				 new String[] { "search_retailers", "list_retailers", "insert_retailer", "insert_product_retailer" },
+				 new String[][] { {"retailer name"}, {}, {"retailer name"}, {"retailer name", "product name", "brand name", "stock", "price"} });
 	}
 	
 	public static void call(String callback, String[] args) {
@@ -147,6 +150,43 @@ public class MenuFactory {
 		case "insert_brand": {
 			Brand brand = new Brand(args[0]);
 			shopAdvizor.insertBrand(brand);
+			break;
+		}
+		case "search_retailers": {
+			Retailer retailer = shopAdvizor.getRetailer(args[0]);
+			System.out.println("Retailer name: " + retailer.m_name);
+			boolean initial_print = false;
+			for(Object obj : retailer.m_items.entrySet()) {
+				Map.Entry<Product, Retailer.ItemInfo> entry = (Map.Entry<Product, Retailer.ItemInfo>)obj;
+				if(!initial_print) {
+					System.out.println("Items sold :");
+					initial_print = true;
+				}
+				System.out.println("Product name: " + entry.getKey().m_name);
+				System.out.println("Product brand: " + entry.getKey().m_brand.m_name);
+				System.out.println("Product price: " + entry.getValue().price + "€");
+				System.out.println("Product stock: " + entry.getValue().stock);
+				System.out.println();
+			}
+			if(!initial_print)
+				System.out.println("Retailer " + retailer.m_name + " sells no products!");
+			System.out.println();
+			break;
+		}
+		case "list_retailers": {
+			for(Object obj : shopAdvizor.m_retailers) {
+				Retailer retailer = (Retailer)obj;
+				System.out.println("Retailer name: " + retailer.m_name);
+			}
+			break;
+		}
+		case "insert_retailer": {
+			Retailer retailer = new Retailer(args[0]);
+			shopAdvizor.insertRetailer(retailer);
+			break;
+		}
+		case "insert_product_retailer": {
+			shopAdvizor.insertProductToRetailer(args[0], args[1], args[2], Integer.parseInt(args[3]), Double.parseDouble(args[4]));
 			break;
 		}
 		default: break;

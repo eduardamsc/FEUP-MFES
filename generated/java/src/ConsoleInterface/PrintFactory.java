@@ -23,6 +23,10 @@ public class PrintFactory {
 	}
 	
 	public static void printLowestPrice(Tuple tuple) {
+		if (tuple == null) {
+			System.out.println("No retailer sells this product!");
+			return;
+		}
 		Retailer retailer = (Retailer)tuple.get(0);
 		Double price = (Double)tuple.get(1);
 		System.out.println("Lowest price: " + price + "€ at " + retailer.m_name);
