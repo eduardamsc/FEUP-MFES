@@ -1,6 +1,5 @@
 package ConsoleInterface;
 
-import java.util.Map;
 import java.util.Scanner;
 
 import ShopAdvizor.*;
@@ -17,9 +16,9 @@ public class MenuFactory {
 	}
 	
 	public static Menu mainMenu() {
-		return new Menu( new String[] { "User menu", "Product menu", "Brand menu", "Retailer menu" },
-						 new String[] { "user_menu", "product_menu", "brand_menu", "retailer_menu" },
-						 new String[][] { {}, {}, {}, {} });
+		return new Menu( new String[] { "User menu", "Product menu", "Brand menu", "Retailer menu", "Competition menu" },
+						 new String[] { "user_menu", "product_menu", "brand_menu", "retailer_menu", "competition_menu" },
+						 new String[][] { {}, {}, {}, {}, {} });
 	}
 	
 	public static Menu userMenu() {
@@ -44,6 +43,12 @@ public class MenuFactory {
 		return new Menu( new String[] { "Search", "List retailers", "Insert retailer", "Insert product on Retailer" }, 
 				 new String[] { "search_retailers", "list_retailers", "insert_retailer", "insert_product_retailer" },
 				 new String[][] { {"retailer name"}, {}, {"retailer name"}, {"retailer name", "product name", "brand name", "stock", "price"} });
+	}
+	
+	public static Menu competitionMenu() {
+		return new Menu( new String[] { "Search", "List competitions", "Create competition", "Compete", "Start competition", "End competition", "Choose winner" }, 
+				 new String[] { "search_competitions", "list_competitions", "insert_competitions", "add_competitor", "start_competition", "end_competition", "choose_winner" },
+				 new String[][] { {"competition title"}, {}, {"competition title", "competition description", "competition prize", "competition brand"}, {"competition title"}, {"competition title"}, {"competition title"}, {"competition title", "competition winner username"}});
 	}
 	
 	public static void call(String callback, String[] args) {
@@ -78,6 +83,10 @@ public class MenuFactory {
 		}
 		case "retailer_menu": {
 			next_menu = retailerMenu();
+			break;
+		}
+		case "competition_menu": {
+			next_menu = competitionMenu();
 			break;
 		}
 		case "logout": {
@@ -123,21 +132,7 @@ public class MenuFactory {
 		}
 		case "search_brands": {
 			Brand brand = shopAdvizor.getBrand(args[0]);
-			System.out.println("Brand name: " + brand.m_name);
-			boolean initial_print = false;
-			for(Object obj : shopAdvizor.m_products) {
-				Product product = (Product)obj;
-				if(product.m_brand.m_name == brand.m_name) {
-					if(!initial_print) {
-						System.out.println("Products:");
-						initial_print = true;
-					}
-					System.out.println("Product name: " + product.m_name);
-				}
-			}
-			if(!initial_print)
-				System.out.println("Brand " + brand.m_name + " has no products!");
-			System.out.println();
+			PrintFactory.printBrand(brand, shopAdvizor);
 			break;
 		}
 		case "list_brands": {
@@ -154,23 +149,7 @@ public class MenuFactory {
 		}
 		case "search_retailers": {
 			Retailer retailer = shopAdvizor.getRetailer(args[0]);
-			System.out.println("Retailer name: " + retailer.m_name);
-			boolean initial_print = false;
-			for(Object obj : retailer.m_items.entrySet()) {
-				Map.Entry<Product, Retailer.ItemInfo> entry = (Map.Entry<Product, Retailer.ItemInfo>)obj;
-				if(!initial_print) {
-					System.out.println("Items sold :");
-					initial_print = true;
-				}
-				System.out.println("Product name: " + entry.getKey().m_name);
-				System.out.println("Product brand: " + entry.getKey().m_brand.m_name);
-				System.out.println("Product price: " + entry.getValue().price + "€");
-				System.out.println("Product stock: " + entry.getValue().stock);
-				System.out.println();
-			}
-			if(!initial_print)
-				System.out.println("Retailer " + retailer.m_name + " sells no products!");
-			System.out.println();
+			PrintFactory.printRetailer(retailer);
 			break;
 		}
 		case "list_retailers": {
@@ -187,6 +166,37 @@ public class MenuFactory {
 		}
 		case "insert_product_retailer": {
 			shopAdvizor.insertProductToRetailer(args[0], args[1], args[2], Integer.parseInt(args[3]), Double.parseDouble(args[4]));
+			break;
+		}
+		case "search_competitions": {
+			Competition competition = (Competition)shopAdvizor.getActivity(args[0]);
+			PrintFactory.printCompetition(competition);
+			break;
+		}
+		case "list_competitions": {
+			PrintFactory.printCompetitions(shopAdvizor.m_activities);
+			break;
+		}
+		case "insert_competitions": {
+			Brand brand = shopAdvizor.getBrand(args[3]);
+			Competition competition = new Competition(args[0], args[1], Double.parseDouble(args[2]), brand);
+			shopAdvizor.insertActivity(competition);
+			break;
+		}
+		case "add_competitor": {
+			shopAdvizor.addCompetitor(args[0]);
+			break;
+		}
+		case "start_competition": {
+			shopAdvizor.startActivity(args[0]);
+			break;
+		}
+		case "end_competition": {
+			shopAdvizor.endActivity(args[0]);
+			break;
+		}
+		case "choose_winner": {
+			shopAdvizor.chooseWinner(args[0], args[1]);
 			break;
 		}
 		default: break;

@@ -43,5 +43,79 @@ public class PrintFactory {
 			System.out.println("Feedback: " + review.feedback);
 		}
 	}
+	
+	public static void printRetailer(Retailer retailer) {
+		System.out.println("Retailer name: " + retailer.m_name);
+		boolean initial_print = false;
+		for(Object obj : retailer.m_items.entrySet()) {
+			Map.Entry<Product, Retailer.ItemInfo> entry = (Map.Entry<Product, Retailer.ItemInfo>)obj;
+			if(!initial_print) {
+				System.out.println("Items sold :");
+				initial_print = true;
+			}
+			System.out.println("Product name: " + entry.getKey().m_name);
+			System.out.println("Product brand: " + entry.getKey().m_brand.m_name);
+			System.out.println("Product price: " + entry.getValue().price + "€");
+			System.out.println("Product stock: " + entry.getValue().stock);
+			System.out.println();
+		}
+		if(!initial_print)
+			System.out.println("Retailer " + retailer.m_name + " sells no products!");
+		System.out.println();
+	}
+	
+	public static void printBrand(Brand brand, ShopAdvizor shopAdvizor) {
+		System.out.println("Brand name: " + brand.m_name);
+		boolean initial_print = false;
+		for(Object obj : shopAdvizor.m_products) {
+			Product product = (Product)obj;
+			if(product.m_brand.m_name == brand.m_name) {
+				if(!initial_print) {
+					System.out.println("Products:");
+					initial_print = true;
+				}
+				System.out.println("Product name: " + product.m_name);
+			}
+		}
+		if(!initial_print)
+			System.out.println("Brand " + brand.m_name + " has no products!");
+		System.out.println();
+	}
+	
+	public static void printCompetitions(VDMSet competitions) {
+		for(Object obj : competitions) {
+			Competition competition = (Competition)obj;
+			System.out.println("Competition title: " + competition.m_title);
+			System.out.println("Competition brand: " + competition.m_brand.m_name);
+			System.out.println();
+		}
+	}
+	
+	public static void printCompetition(Competition competition) {
+		System.out.println("Title: " + competition.m_title);
+		System.out.println("Description: " + competition.m_description);
+		System.out.println("Brand: " + competition.m_brand.m_name);
+		System.out.println("Prize: " + competition.m_prize);
+		if(competition.m_has_ended) {
+			System.out.println("The competition has ended!");
+			if(competition.m_winner != null)
+				System.out.println("The winner is " + competition.m_winner.m_username + "!");
+			else System.out.println("A winner has not yet been selected!");	
+		}
+		else if(competition.m_has_started)
+			System.out.println("The competition has started!");
+		else System.out.println("The competition has not yet started!");
+		boolean first_print = true;
+		for(Object obj : competition.m_competitors) {
+			if(first_print) {
+				System.out.println("Competitors:");
+				first_print = false;
+			}
+			User user = (User)obj;
+			System.out.println(user.m_username);
+		}
+		if(first_print)
+			System.out.println("No users competing!");
+	}
 
 }
