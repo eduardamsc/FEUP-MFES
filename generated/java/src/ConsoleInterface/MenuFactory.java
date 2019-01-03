@@ -34,7 +34,9 @@ public class MenuFactory {
 	}
 	
 	public static Menu brandMenu() {
-		return null;
+		return new Menu( new String[] { "Search", "List brands", "Insert brand" }, 
+				 new String[] { "search_brands", "list_brands", "insert_brand" },
+				 new String[][] { {"brand name"}, {}, {"brand name"} });
 	}
 	
 	public static Menu retailerMenu() {
@@ -114,6 +116,37 @@ public class MenuFactory {
 				PrintFactory.printProduct(product);
 				System.out.println();
 			}
+			break;
+		}
+		case "search_brands": {
+			Brand brand = shopAdvizor.getBrand(args[0]);
+			System.out.println("Brand name: " + brand.m_name);
+			boolean initial_print = false;
+			for(Object obj : shopAdvizor.m_products) {
+				Product product = (Product)obj;
+				if(product.m_brand.m_name == brand.m_name) {
+					if(!initial_print) {
+						System.out.println("Products:");
+						initial_print = true;
+					}
+					System.out.println("Product name: " + product.m_name);
+				}
+			}
+			if(!initial_print)
+				System.out.println("Brand " + brand.m_name + " has no products!");
+			System.out.println();
+			break;
+		}
+		case "list_brands": {
+			for(Object obj : shopAdvizor.m_brands) {
+				Brand brand = (Brand)obj;
+				System.out.println("Brand name: " + brand.m_name);
+			}
+			break;
+		}
+		case "insert_brand": {
+			Brand brand = new Brand(args[0]);
+			shopAdvizor.insertBrand(brand);
 			break;
 		}
 		default: break;
