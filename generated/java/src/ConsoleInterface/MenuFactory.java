@@ -28,9 +28,9 @@ public class MenuFactory {
 	}
 	
 	public static Menu productMenu() {
-		return new Menu( new String[] { "Search" }, 
-				 new String[] { "search_product" },
-				 new String[][] { {"product name", "brand name"} });
+		return new Menu( new String[] { "Search", "List products", "Insert product", "Review product", "Remove review" }, 
+				 new String[] { "search_product", "list_products", "insert_product", "insert_review", "remove_review" },
+				 new String[][] { {"product name", "brand name"}, {}, {"product name", "product description", "brand name"}, {"product name", "brand name", "rating", "feeback"}, {"product name", "brand name"} });
 	}
 	
 	public static Menu brandMenu() {
@@ -92,6 +92,28 @@ public class MenuFactory {
 			PrintFactory.printLowestPrice(shopAdvizor.getLowestPriceRetailer(product));
 			PrintFactory.printProductReviews(shopAdvizor.getProductReviews(args[0], args[1]));
 			System.out.println();
+			break;
+		}
+		case "insert_product": {
+			Brand brand = shopAdvizor.getBrand(args[2]);
+			Product product = new Product(args[0], args[1], brand);
+			shopAdvizor.insertProduct(product);
+			break;
+		}
+		case "insert_review": {
+			shopAdvizor.insertReview(args[0], args[1], Double.parseDouble(args[2]), args[3]);
+			break;
+		}
+		case "remove_review": {
+			shopAdvizor.removeReview(args[0], args[1]);
+			break;
+		}
+		case "list_products": {
+			for(Object obj : shopAdvizor.m_products) {
+				Product product = (Product)obj;
+				PrintFactory.printProduct(product);
+				System.out.println();
+			}
 			break;
 		}
 		default: break;
