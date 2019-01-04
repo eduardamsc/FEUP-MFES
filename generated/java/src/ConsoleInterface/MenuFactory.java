@@ -137,7 +137,11 @@ public class MenuFactory {
 		}
 		case "search_product": {
 			Brand brand = shopAdvizor.getBrand(args[1]);
+			if(!valid("Brand", brand, args[1]))
+				break;
 			Product product = shopAdvizor.getProduct(args[0], brand);
+			if(!valid("Product", product, args[0] + " of brand " + args[1]))
+				break;
 			PrintFactory.printProduct(product);
 			System.out.println("Average Rating: " + shopAdvizor.getProductAvgRating(args[0], args[1]) + "/5");
 			PrintFactory.printLowestPrice(shopAdvizor.getLowestPriceRetailer(product));
@@ -148,6 +152,8 @@ public class MenuFactory {
 			if (!validUser())
 				break;
 			Brand brand = shopAdvizor.getBrand(args[2]);
+			if(!valid("Brand", brand, args[1]))
+				break;
 			Product product = new Product(args[0], args[1], brand);
 			shopAdvizor.insertProduct(product);
 			break;
@@ -168,11 +174,14 @@ public class MenuFactory {
 			for (Object obj : shopAdvizor.m_products) {
 				Product product = (Product) obj;
 				PrintFactory.printProduct(product);
+				System.out.println();
 			}
 			break;
 		}
 		case "search_brands": {
 			Brand brand = shopAdvizor.getBrand(args[0]);
+			if(!valid("Brand", brand, args[0]))
+				break;
 			PrintFactory.printBrand(brand, shopAdvizor);
 			break;
 		}
@@ -192,6 +201,8 @@ public class MenuFactory {
 		}
 		case "search_retailers": {
 			Retailer retailer = shopAdvizor.getRetailer(args[0]);
+			if(!valid("Retailer", retailer, args[0]))
+				break;
 			PrintFactory.printRetailer(retailer);
 			break;
 		}
@@ -218,6 +229,8 @@ public class MenuFactory {
 		}
 		case "search_competitions": {
 			Competition competition = (Competition) shopAdvizor.getActivity(args[0]);
+			if(!valid("Competition", competition, args[0]))
+				break;
 			PrintFactory.printCompetition(competition);
 			break;
 		}
@@ -229,6 +242,8 @@ public class MenuFactory {
 			if (!validUser())
 				break;
 			Brand brand = shopAdvizor.getBrand(args[3]);
+			if(!valid("Brand", brand, args[3]))
+				break;
 			Competition competition = new Competition(args[0], args[1], Double.parseDouble(args[2]), brand);
 			shopAdvizor.insertActivity(competition);
 			break;
@@ -262,6 +277,13 @@ public class MenuFactory {
 		}
 		menu = next_menu;
 		System.out.println(new String(new char[2]).replace("\0", "\r\n"));
+	}
+	
+	public static boolean valid(String type, Object obj, String name) {
+		if (obj != null)
+			return true;
+		PrintFactory.printError(type + " " + name + " not found!");
+		return false;
 	}
 
 	public static boolean validUser() {
