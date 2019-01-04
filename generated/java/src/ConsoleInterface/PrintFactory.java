@@ -5,16 +5,27 @@ import org.overture.codegen.runtime.*;
 import java.util.*;
 
 public class PrintFactory {
+	public static void printError(String msg) {
+		System.out.println("Error: " + msg);
+	}
+	
 	public static void printUserReviews(VDMSet reviews) {
+		boolean first_print = true;
 		for(Object obj : reviews) {
+			if(first_print) {
+				System.out.print("My Reviews:");
+				first_print = false;
+			}
 			Tuple tuple = (Tuple)obj;
 			Product product = (Product)tuple.get(0);
 			Product.Review review = (Product.Review)tuple.get(1);
 			printProduct(product);
+			System.out.println();
 			System.out.println("Rating: " + review.rating + "/5");
 			System.out.println("Feedback: " + review.feedback);
-			System.out.println();
 		}
+		if(first_print)
+			System.out.println("You have no reviews!");
 	}
 	
 	public static void printProduct(Product product) {
@@ -33,7 +44,12 @@ public class PrintFactory {
 	}
 	
 	public static void printProductReviews(VDMMap reviews) {
+		boolean first_print = true;
 		for(Object obj : reviews.entrySet()) {
+			if(first_print) {
+				System.out.print("Product Reviews:");
+				first_print = false;
+			}
 			Map.Entry<User, Product.Review> entry = (Map.Entry<User, Product.Review>)obj;
 			User user = entry.getKey();
 			Product.Review review = entry.getValue();
@@ -42,6 +58,8 @@ public class PrintFactory {
 			System.out.println("Rating: " + review.rating);
 			System.out.println("Feedback: " + review.feedback);
 		}
+		if(first_print)
+			System.out.println("This product has no reviews!");
 	}
 	
 	public static void printRetailer(Retailer retailer) {
@@ -53,15 +71,14 @@ public class PrintFactory {
 				System.out.println("Items sold :");
 				initial_print = true;
 			}
+			System.out.println();
 			System.out.println("Product name: " + entry.getKey().m_name);
 			System.out.println("Product brand: " + entry.getKey().m_brand.m_name);
 			System.out.println("Product price: " + entry.getValue().price + "€");
 			System.out.println("Product stock: " + entry.getValue().stock);
-			System.out.println();
 		}
 		if(!initial_print)
 			System.out.println("Retailer " + retailer.m_name + " sells no products!");
-		System.out.println();
 	}
 	
 	public static void printBrand(Brand brand, ShopAdvizor shopAdvizor) {
@@ -79,15 +96,14 @@ public class PrintFactory {
 		}
 		if(!initial_print)
 			System.out.println("Brand " + brand.m_name + " has no products!");
-		System.out.println();
 	}
 	
 	public static void printCompetitions(VDMSet competitions) {
 		for(Object obj : competitions) {
 			Competition competition = (Competition)obj;
+			System.out.println();
 			System.out.println("Competition title: " + competition.m_title);
 			System.out.println("Competition brand: " + competition.m_brand.m_name);
-			System.out.println();
 		}
 	}
 	
@@ -130,7 +146,6 @@ public class PrintFactory {
 		}
 		if(!initial_print)
 			System.out.println("You are not competing in any competitions!");
-		System.out.println();
 	}
 
 }

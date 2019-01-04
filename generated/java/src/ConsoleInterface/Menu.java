@@ -6,16 +6,19 @@ public class Menu {
 	public String[] m_callbacks;
 	public String[][] m_inputs;
 	public Menu m_back;
+	public String m_title;
 		
-	public Menu(String[] options, String[] callbacks, String[][] inputs, Menu back) {
+	public Menu(String[] options, String[] callbacks, String[][] inputs, Menu back, String title) {
 		m_options = options;
 		m_callbacks = callbacks;
 		m_inputs = inputs;
 		m_back = back;
+		m_title = title;
 	}
 	
 	public String toString() {
 		String res = new String();
+		res += m_title + "\n";
         for(int i = 0; i < m_options.length; i++) 
         	res += i + ". " + m_options[i] + "\n";
         res += "\n" + "Select an option: ";
