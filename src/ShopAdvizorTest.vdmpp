@@ -1,4 +1,11 @@
 class ShopAdvizorTest
+/*
+  Contains the test cases for the ShopAdvizor app.
+  Illustrates a scenario-based testing approach.
+  The test cases cover all usage scenarios.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
  values
  	private admin : User = new User("admin", "admin", <Admin>);
   
