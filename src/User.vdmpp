@@ -1,4 +1,11 @@
 class User
+/*
+  Defines a user to can use the app.
+  Since with different permitions are allowed to do different things,
+  those types are defined here.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
 	types
 		public String = seq1 of char;
 		public Type = <Normal> | <Retailer> | <Brand> | <Admin>

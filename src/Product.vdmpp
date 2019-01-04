@@ -1,4 +1,11 @@
 class Product
+/*
+  Defines a product to be reviewed.
+  Since a product is composed of substances in certain proportions 
+  the units in which they are measured are also defined.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
 types
 	public Id = nat1;
 	public String = seq1 of char;
