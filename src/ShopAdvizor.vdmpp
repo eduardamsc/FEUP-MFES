@@ -2,8 +2,6 @@ class ShopAdvizor
 types
 	public String = seq1 of char;
 
-values
-
 instance variables
 	public m_products: set of Product;
 	public m_users: set of User;
@@ -364,9 +362,5 @@ operations
 				competition.chooseWinner(user);
 			)
 	);
-	
-functions
-	
-traces
 
 end ShopAdvizor

@@ -1,8 +1,6 @@
 class Brand
 types
 	public String = seq1 of char;
-	
-values
 
 instance variables
 	public m_name: String;
@@ -15,9 +13,5 @@ operations
 		m_name := name;
 		return self;
 	);
-
-functions
-
-traces
 
 end Brand
