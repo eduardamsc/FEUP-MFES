@@ -181,6 +181,8 @@ class ShopAdvizorTest
 		shopAdvizor.logout();
 		assertTrue(shopAdvizor.login("u1","p1") = u1);
 		shopAdvizor.addCompetitor("Competitive eating");
+		shopAdvizor.addCompetitor("Biggest buyer");
+		assertTrue(shopAdvizor.getUserCompetitions() = {c,c2});
 		shopAdvizor.logout();
 		assertTrue(shopAdvizor.login("u2","p2") = u2);
 		shopAdvizor.addCompetitor("Competitive eating");

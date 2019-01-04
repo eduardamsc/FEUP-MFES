@@ -24,9 +24,9 @@ public class MenuFactory {
 	}
 	
 	public static Menu userMenu() {
-		return new Menu( new String[] { "Sign out", "My Reviews", "Back" }, 
-				 new String[] { "logout", "user_reviews", "back" },
-				 new String[][] { {}, {}, {} },
+		return new Menu( new String[] { "Sign out", "My Reviews", "My Competitions", "Back" }, 
+				 new String[] { "logout", "user_reviews", "user_competitions", "back" },
+				 new String[][] { {}, {}, {}, {} },
 				 mainMenu());
 	}
 	
@@ -107,6 +107,10 @@ public class MenuFactory {
 		}
 		case "user_reviews": {
 			PrintFactory.printUserReviews(shopAdvizor.getUserReviews());
+			break;
+		}
+		case "user_competitions": {
+			PrintFactory.printUserCompetitions(shopAdvizor.getUserCompetitions());
 			break;
 		}
 		case "search_product": {

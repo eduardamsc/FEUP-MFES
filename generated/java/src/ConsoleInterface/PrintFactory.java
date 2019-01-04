@@ -117,5 +117,20 @@ public class PrintFactory {
 		if(first_print)
 			System.out.println("No users competing!");
 	}
+	
+	public static void printUserCompetitions(VDMSet competitions) {
+		boolean initial_print = false;
+		for(Object obj : competitions) {
+			Competition competition = (Competition)obj;
+			if(!initial_print) {
+				System.out.println("Competitions:");
+				initial_print = true;
+			}
+			System.out.println("Competition title: " + competition.m_title);
+		}
+		if(!initial_print)
+			System.out.println("You are not competing in any competitions!");
+		System.out.println();
+	}
 
 }

@@ -39,10 +39,10 @@ public class Product {
       return null;
     }
 
-    for (Iterator iterator_20 = MapUtil.rng(Utils.copy(m_reviews)).iterator();
-        iterator_20.hasNext();
+    for (Iterator iterator_21 = MapUtil.rng(Utils.copy(m_reviews)).iterator();
+        iterator_21.hasNext();
         ) {
-      Review review = (Review) iterator_20.next();
+      Review review = (Review) iterator_21.next();
       sum = sum.longValue() + review.rating.longValue();
     }
     return Utils.divide((1.0 * sum.longValue()), num_reviews.longValue());

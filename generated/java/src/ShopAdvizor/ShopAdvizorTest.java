@@ -211,6 +211,8 @@ public class ShopAdvizorTest {
     shopAdvizor.logout();
     assertTrue(Utils.equals(shopAdvizor.login("u1", "p1"), u1));
     shopAdvizor.addCompetitor("Competitive eating");
+    shopAdvizor.addCompetitor("Biggest buyer");
+    assertTrue(Utils.equals(shopAdvizor.getUserCompetitions(), SetUtil.set(c, c2)));
     shopAdvizor.logout();
     assertTrue(Utils.equals(shopAdvizor.login("u2", "p2"), u2));
     shopAdvizor.addCompetitor("Competitive eating");

@@ -176,6 +176,16 @@ operations
 		)
 	);
 	
+	-- Gets the competitions the user is competing on
+	public getUserCompetitions : () ==> [set of Competition]
+	getUserCompetitions() == 
+	(	
+		dcl competitions : set of Competition;
+		requireUserToBe(<Normal>);
+		competitions := { c | c in set m_activities & isofclass(Competition,c) and m_user in set narrow_(c,Competition).m_competitors};
+		return competitions;
+	);
+	
 	-- Gets the retailer with the lowest price on a product
 	public getLowestPriceRetailer : Product ==> [Retailer * rat]
 	getLowestPriceRetailer(product) == 

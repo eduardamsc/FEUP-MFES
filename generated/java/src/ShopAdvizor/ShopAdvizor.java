@@ -359,6 +359,31 @@ public class ShopAdvizor {
     }
   }
 
+  public VDMSet getUserCompetitions() {
+
+    VDMSet competitions = null;
+    requireUserToBe(Quotes.NormalQuote.getInstance());
+    VDMSet setCompResult_3 = SetUtil.set();
+    VDMSet set_13 = Utils.copy(m_activities);
+    for (Iterator iterator_13 = set_13.iterator(); iterator_13.hasNext(); ) {
+      Activity c = ((Activity) iterator_13.next());
+      Boolean andResult_11 = false;
+
+      if (c instanceof Competition) {
+        if (SetUtil.inSet(m_user, ((Competition) c).m_competitors)) {
+          andResult_11 = true;
+        }
+      }
+
+      if (andResult_11) {
+        setCompResult_3.add(c);
+      }
+    }
+    competitions = Utils.copy(setCompResult_3);
+
+    return Utils.copy(competitions);
+  }
+
   public Tuple getLowestPriceRetailer(final Product product) {
 
     Tuple retailer = null;
@@ -367,29 +392,29 @@ public class ShopAdvizor {
       return null;
 
     } else {
-      VDMSet setCompResult_3 = SetUtil.set();
-      VDMSet set_13 = Utils.copy(m_retailers);
-      for (Iterator iterator_13 = set_13.iterator(); iterator_13.hasNext(); ) {
-        Retailer r = ((Retailer) iterator_13.next());
+      VDMSet setCompResult_4 = SetUtil.set();
+      VDMSet set_14 = Utils.copy(m_retailers);
+      for (Iterator iterator_14 = set_14.iterator(); iterator_14.hasNext(); ) {
+        Retailer r = ((Retailer) iterator_14.next());
         if (SetUtil.inSet(product, MapUtil.dom(r.m_items))) {
-          setCompResult_3.add(
+          setCompResult_4.add(
               Tuple.mk_(r, ((Retailer.ItemInfo) Utils.get(r.m_items, product)).price));
         }
       }
-      retailers = Utils.copy(setCompResult_3);
+      retailers = Utils.copy(setCompResult_4);
 
       Boolean existsExpResult_1 = false;
-      VDMSet set_14 = Utils.copy(retailers);
-      for (Iterator iterator_14 = set_14.iterator();
-          iterator_14.hasNext() && !(existsExpResult_1);
+      VDMSet set_15 = Utils.copy(retailers);
+      for (Iterator iterator_15 = set_15.iterator();
+          iterator_15.hasNext() && !(existsExpResult_1);
           ) {
-        Tuple r1 = ((Tuple) iterator_14.next());
+        Tuple r1 = ((Tuple) iterator_15.next());
         Boolean forAllExpResult_1 = true;
-        VDMSet set_15 = Utils.copy(retailers);
-        for (Iterator iterator_15 = set_15.iterator();
-            iterator_15.hasNext() && forAllExpResult_1;
+        VDMSet set_16 = Utils.copy(retailers);
+        for (Iterator iterator_16 = set_16.iterator();
+            iterator_16.hasNext() && forAllExpResult_1;
             ) {
-          Tuple r2 = ((Tuple) iterator_15.next());
+          Tuple r2 = ((Tuple) iterator_16.next());
           forAllExpResult_1 =
               ((Number) r1.get(1)).doubleValue() <= ((Number) r2.get(1)).doubleValue();
         }
@@ -398,15 +423,15 @@ public class ShopAdvizor {
       if (existsExpResult_1) {
         Tuple iotaExp_6 = null;
         Long iotaCounter_6 = 0L;
-        VDMSet set_16 = Utils.copy(retailers);
-        for (Iterator iterator_16 = set_16.iterator(); iterator_16.hasNext(); ) {
-          Tuple r1 = ((Tuple) iterator_16.next());
+        VDMSet set_17 = Utils.copy(retailers);
+        for (Iterator iterator_17 = set_17.iterator(); iterator_17.hasNext(); ) {
+          Tuple r1 = ((Tuple) iterator_17.next());
           Boolean forAllExpResult_2 = true;
-          VDMSet set_17 = Utils.copy(retailers);
-          for (Iterator iterator_17 = set_17.iterator();
-              iterator_17.hasNext() && forAllExpResult_2;
+          VDMSet set_18 = Utils.copy(retailers);
+          for (Iterator iterator_18 = set_18.iterator();
+              iterator_18.hasNext() && forAllExpResult_2;
               ) {
-            Tuple r2 = ((Tuple) iterator_17.next());
+            Tuple r2 = ((Tuple) iterator_18.next());
             forAllExpResult_2 =
                 ((Number) r1.get(1)).doubleValue() <= ((Number) r2.get(1)).doubleValue();
           }
@@ -503,38 +528,38 @@ public class ShopAdvizor {
   public User login(final String username, final String password) {
 
     Long exists1Counter_6 = 0L;
-    VDMSet set_18 = Utils.copy(m_users);
-    for (Iterator iterator_18 = set_18.iterator();
-        iterator_18.hasNext() && (exists1Counter_6.longValue() < 2L);
+    VDMSet set_19 = Utils.copy(m_users);
+    for (Iterator iterator_19 = set_19.iterator();
+        iterator_19.hasNext() && (exists1Counter_6.longValue() < 2L);
         ) {
-      User u = ((User) iterator_18.next());
-      Boolean andResult_14 = false;
+      User u = ((User) iterator_19.next());
+      Boolean andResult_15 = false;
 
       if (Utils.equals(u.m_username, username)) {
         if (u.passwordMatches(password)) {
-          andResult_14 = true;
+          andResult_15 = true;
         }
       }
 
-      if (andResult_14) {
+      if (andResult_15) {
         exists1Counter_6++;
       }
     }
     if (Utils.equals(exists1Counter_6, 1L)) {
       User iotaExp_7 = null;
       Long iotaCounter_7 = 0L;
-      VDMSet set_19 = Utils.copy(m_users);
-      for (Iterator iterator_19 = set_19.iterator(); iterator_19.hasNext(); ) {
-        User u = ((User) iterator_19.next());
-        Boolean andResult_15 = false;
+      VDMSet set_20 = Utils.copy(m_users);
+      for (Iterator iterator_20 = set_20.iterator(); iterator_20.hasNext(); ) {
+        User u = ((User) iterator_20.next());
+        Boolean andResult_16 = false;
 
         if (Utils.equals(u.m_username, username)) {
           if (u.passwordMatches(password)) {
-            andResult_15 = true;
+            andResult_16 = true;
           }
         }
 
-        if (andResult_15) {
+        if (andResult_16) {
           iotaCounter_7++;
           if (iotaCounter_7.longValue() > 1L) {
             throw new RuntimeException("Iota selects more than one result");
@@ -596,15 +621,15 @@ public class ShopAdvizor {
     Activity activity = getActivity(title);
     Competition competition = null;
     requireUserToBe(Quotes.NormalQuote.getInstance());
-    Boolean andResult_18 = false;
+    Boolean andResult_19 = false;
 
     if (!(Utils.equals(activity, null))) {
       if (activity instanceof Competition) {
-        andResult_18 = true;
+        andResult_19 = true;
       }
     }
 
-    if (andResult_18) {
+    if (andResult_19) {
       competition = ((Competition) activity);
       competition.addCompetitor(m_user);
     }
@@ -616,23 +641,23 @@ public class ShopAdvizor {
     Competition competition = null;
     User user = getUser(username);
     requireUserToBe(Quotes.BrandQuote.getInstance());
-    Boolean andResult_19 = false;
+    Boolean andResult_20 = false;
 
     if (!(Utils.equals(user, null))) {
-      Boolean andResult_20 = false;
+      Boolean andResult_21 = false;
 
       if (!(Utils.equals(activity, null))) {
         if (activity instanceof Competition) {
-          andResult_20 = true;
+          andResult_21 = true;
         }
       }
 
-      if (andResult_20) {
-        andResult_19 = true;
+      if (andResult_21) {
+        andResult_20 = true;
       }
     }
 
-    if (andResult_19) {
+    if (andResult_20) {
       requireSameUsername(activity.m_brand.m_name);
       competition = ((Competition) activity);
       competition.chooseWinner(user);
