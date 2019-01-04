@@ -78,8 +78,4 @@ operations
 	pre ingredient not in set dom m_ingredients
 	post m_ingredients = m_ingredients~ ++ {ingredient |-> composition};
 
-functions
-
-traces
-
 end Product

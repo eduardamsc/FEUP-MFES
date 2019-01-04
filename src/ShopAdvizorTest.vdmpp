@@ -1,6 +1,4 @@
 class ShopAdvizorTest
- instance variables
- 
  values
  	private admin : User = new User("admin", "admin", <Admin>);
   

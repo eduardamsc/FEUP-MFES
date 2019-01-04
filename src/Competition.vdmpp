@@ -1,7 +1,4 @@
 class Competition is subclass of Activity
-types
-
-values
 
 instance variables
 	public m_competitors : set of User;
@@ -37,9 +34,5 @@ operations
 	)
 	pre m_has_started and m_has_ended and m_winner = nil and user in set m_competitors
 	post m_winner = user and m_winner in set m_competitors;
-
-functions
-
-traces
 
 end Competition

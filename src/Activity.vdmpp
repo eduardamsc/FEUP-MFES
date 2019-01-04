@@ -2,8 +2,6 @@ class Activity
 types
 	public String = seq1 of char;
 
-values
-
 instance variables
 	public m_title : String;
 	public m_description : String;
@@ -47,8 +45,4 @@ operations
 	pre not m_has_ended and m_has_started
 	post m_has_ended = true;
 	
-functions
-
-traces
-
 end Activity

@@ -3,8 +3,6 @@ types
 	public String = seq1 of char;
 	public ItemInfo :: stock: int
 								     price: rat;
-	
-values
 
 instance variables
 	public m_name: String;
@@ -27,9 +25,5 @@ operations
 	)
 	pre product not in set dom m_items
 	post m_items = m_items~ ++ {product |-> info};
-
-functions
-
-traces
 
 end Retailer
