@@ -1,0 +1,126 @@
+\begin{vdmpp}[breaklines=true]
+class Product
+/*
+  Defines a product to be reviewed.
+  Since a product is composed of substances in certain proportions 
+  the units in which they are measured are also defined.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
+types
+ public Id = nat1;
+ public String = seq1 of char;
+ public Substance = seq1 of char;
+ public Composition :: quantity: real
+          unit: seq1 of char
+          inv c == c.unit in set unitValues;
+ public Review :: rating: nat1
+           feedback: seq1 of char
+ inv review == review.rating >= 1 and review.rating <= 5;
+ 
+values
+ public unitValues : set of seq1 of char = {"Kg", "g", "l", "ml", "%", "units"};
+ 
+instance variables
+ public m_id: Id;
+ private static m_next_id : Id := 1;
+ public m_name: String;
+ public m_description: String;
+ public m_brand: Brand;
+ public m_ingredients: map Substance to Composition;
+ public m_reviews: map User to Review;
+ 
+operations
+ -- Product constructor
+(*@
+\label{Product:34}
+@*)
+ public Product : String * String * Brand ==> Product
+ Product(name, description, brand) ==
+ (
+  m_id := m_next_id;
+  m_next_id := m_next_id + 1;
+  m_name := name;
+  m_description := description;
+  m_brand := brand;
+  m_ingredients := { |-> };
+  m_reviews := { |-> };
+  return self;
+ );
+ 
+ -- Returns the average review rating
+(*@
+\label{getAvgRating:48}
+@*)
+ public getAvgRating : () ==> [real]
+ getAvgRating() == 
+ (
+  dcl sum : int := 0;
+  dcl num_reviews : int := card rng m_reviews;
+  
+  if num_reviews = 0
+   then return nil;
+  
+  for all review in set rng m_reviews do sum := sum + review.rating;
+  return sum / num_reviews;
+ );
+ 
+ --Adds a review and the user who did it to reviews map
+(*@
+\label{insertReview:62}
+@*)
+ public insertReview : User * Review ==> ()
+ insertReview(user, review) ==
+ (
+  m_reviews := m_reviews ++ {user |-> review}
+ )
+ pre user not in set dom m_reviews
+ post m_reviews = m_reviews~ ++ {user |-> review};
+ 
+ --Removes a review from the reviews map
+(*@
+\label{removeReview:71}
+@*)
+ public removeReview : User ==> ()
+ removeReview(user) ==
+ (
+  m_reviews := {user} <-: m_reviews
+ )
+ pre user in set dom m_reviews
+ post {user} <: m_reviews = {|->};
+ 
+ --Adds an igredient and its quantity and unit to ingredients map
+(*@
+\label{insertIngredient:80}
+@*)
+ public insertIngredient : Substance * Composition ==> ()
+ insertIngredient(ingredient, composition) ==
+ (
+  m_ingredients := m_ingredients ++ {ingredient |-> composition}
+ )
+ pre ingredient not in set dom m_ingredients
+ post m_ingredients = m_ingredients~ ++ {ingredient |-> composition};
+
+end Product
+\end{vdmpp}
+\bigskip
+\begin{longtable}{|l|r|r|r|}
+\hline
+Function or operation & Line & Coverage & Calls \\
+\hline
+\hline
+\hyperref[Product:34]{Product} & 34&100.0\% & 9 \\
+\hline
+\hyperref[getAvgRating:48]{getAvgRating} & 48&100.0\% & 3 \\
+\hline
+\hyperref[insertIngredient:80]{insertIngredient} & 80&100.0\% & 3 \\
+\hline
+\hyperref[insertReview:62]{insertReview} & 62&100.0\% & 5 \\
+\hline
+\hyperref[removeReview:71]{removeReview} & 71&100.0\% & 2 \\
+\hline
+\hline
+Product.vdmpp & & 100.0\% & 22 \\
+\hline
+\end{longtable}
+

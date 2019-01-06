@@ -1,0 +1,22 @@
+class Brand
+/*
+  Defines a brand which can manufacture a product.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
+types
+	public String = seq1 of char;
+
+instance variables
+	public m_name: String;
+	
+operations
+	-- Brand constructor
+	public Brand : String ==> Brand
+	Brand(name) ==
+	(
+		m_name := name;
+		return self;
+	);
+
+end Brand

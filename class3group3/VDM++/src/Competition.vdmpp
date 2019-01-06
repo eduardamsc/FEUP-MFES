@@ -1,0 +1,43 @@
+class Competition is subclass of Activity
+/*
+  Defines a competition which is an activity with users as competitors
+  and a winner once the activity is completed.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
+instance variables
+	public m_competitors : set of User;
+	public m_winner : [User];
+	
+	inv forall u1, u2 in set m_competitors & u1 <> u2 => u1.m_username <> u2.m_username;
+	inv m_winner = nil or (m_has_ended and m_winner in set m_competitors); -- Winner must be a competitor
+
+operations
+	-- Competition constructor
+	public Competition : String * String * rat * Brand ==> Competition
+	Competition(title, description, prize, brand) ==
+	(
+		m_competitors := {};
+		m_winner := nil;
+		Activity(title, description, prize, brand);
+	);
+	
+	-- Add a competitor
+	public addCompetitor : User ==> ()
+	addCompetitor(user) == 
+	(
+		m_competitors := m_competitors union {user}
+	)
+	pre user not in set m_competitors and not m_has_started
+	post m_competitors = m_competitors~ union {user};
+	
+	-- Choose winner
+	public chooseWinner : User ==> ()
+	chooseWinner(user) ==
+	(
+		m_winner := user;
+	)
+	pre m_has_started and m_has_ended and m_winner = nil and user in set m_competitors
+	post m_winner = user and m_winner in set m_competitors;
+
+end Competition

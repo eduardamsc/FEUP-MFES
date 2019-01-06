@@ -1,0 +1,372 @@
+class ShopAdvizor
+/*
+  Contains the core model of the ShopAdvizor app.
+  Defines the state variables and operations available to the users.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
+types
+	public String = seq1 of char;
+
+instance variables
+	public m_products: set of Product;
+	public m_users: set of User;
+	public m_retailers: set of Retailer;
+	public m_brands: set of Brand;
+	public m_activities: set of Activity;
+	private m_user: [User];
+	
+	inv forall b1, b2 in set m_brands & b1 <> b2 => b1.m_name <> b2.m_name;
+	inv forall r1, r2 in set m_retailers & r1 <> r2 => r1.m_name <> r2.m_name;
+	inv forall u1, u2 in set m_users & u1 <> u2 => u1.m_username <> u2.m_username;
+	inv forall p1, p2 in set m_products & p1 <> p2 => p1.m_name <> p2.m_name or p1.m_brand <> p2.m_brand;
+	inv forall a1, a2 in set m_activities & a1 <> a2 => a1.m_title <> a2.m_title;
+	inv m_user = nil or m_user in set m_users;
+	
+operations
+	-- ShopAdvizor constructor
+	public ShopAdvizor : () ==> ShopAdvizor
+	ShopAdvizor() ==
+	(
+		m_products := {};
+		m_users := {};
+		m_retailers := {};
+		m_brands := {};
+		m_activities := {};
+		m_user := nil;
+		return self;
+	);
+	
+	-- Get brand by name
+	public getBrand : String ==> [Brand]
+	getBrand(name) == 
+	(	
+		dcl brand : Brand;
+		if exists1 b in set m_brands & b.m_name = name
+		then (
+			brand := iota b in set m_brands & b.m_name = name;
+			return brand;
+		)
+		else return nil;
+	);
+	
+	-- Get retailer by name
+	public getRetailer : String ==> [Retailer]
+	getRetailer(name) == 
+	(	
+		dcl retailer : Retailer;
+		if exists1 r in set m_retailers & r.m_name = name
+		then (
+			retailer := iota r in set m_retailers & r.m_name = name;
+			return retailer;
+		)
+		else return nil;
+	);
+	
+	-- Get user by name
+	public getUser : String ==> [User]
+	getUser(name) == 
+	(	
+		dcl user : User;
+		if exists1 u in set m_users & u.m_username = name
+		then (
+			user := iota u in set m_users & u.m_username = name;
+			return user;
+		)
+		else return nil;
+	);	
+	
+	-- Get activity by title
+	public getActivity : String ==> [Activity]
+	getActivity(title) == 
+	(	
+		dcl activity : Activity;
+		if exists1 a in set m_activities & a.m_title = title
+		then (
+			activity := iota a in set m_activities & a.m_title = title;
+			return activity;
+		)
+		else return nil;
+	);
+	
+	-- Get product by name and brand
+	public getProduct : String * Brand ==> [Product]
+	getProduct(name, brand) == 
+	(	
+		dcl product : Product;
+		if exists1 p in set m_products & p.m_name = name and p.m_brand = brand
+		then (
+			product := iota p in set m_products & p.m_name = name and p.m_brand = brand;
+			return product;
+		)
+		else return nil;
+	);
+	
+	-- Gets the average rating of a product
+	public getProductAvgRating : String * String ==> [real]
+	getProductAvgRating(product_name, brand_name) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product];
+		if brand = nil then return nil;
+		product := getProduct(product_name, brand);
+		if product = nil then return nil
+		else return product.getAvgRating();
+	);
+	
+	-- Insert a user review on a product
+	public insertReview : String * String * nat1 * String ==> bool
+	insertReview(product_name, brand_name, rating, feedback) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product];
+		requireUserToBe(<Normal>);
+		if brand = nil then return false;
+		product := getProduct(product_name, brand);
+		if product = nil then return false
+		else (
+			product.insertReview(m_user, mk_Product`Review(rating, feedback));
+			return true;
+		)
+	);
+	
+	-- Remove a user review on a product
+	public removeReview : String * String ==> bool
+	removeReview(product_name, brand_name) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product];
+		requireUserToBe(<Normal>);
+		if brand = nil then return false;
+		product := getProduct(product_name, brand);
+		if product = nil then return false
+		else (
+			product.removeReview(m_user);
+			return true;
+		)
+	);
+	
+	-- Gets all reviews of a product
+	public getProductReviews : String * String ==> [map User to Product`Review]
+	getProductReviews(product_name, brand_name) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl product : [Product];
+		if brand = nil then return nil;
+		product := getProduct(product_name, brand);
+		if product = nil then return nil
+		else return product.m_reviews
+	);
+
+	-- Gets all reviews given by the logged in user
+	public getUserReviews : () ==> [set of (Product * Product`Review)]
+	getUserReviews() == 
+	(	
+		return getUserReviews(m_user.m_username);
+	)
+	pre m_user <> nil;
+	
+	-- Gets all reviews given by a user
+	public getUserReviews : String ==> [set of (Product * Product`Review)]
+	getUserReviews(username) == 
+	(	
+		dcl user : [User] := getUser(username);
+		dcl reviews : set of (Product * Product`Review);
+		if user = nil
+			then return nil
+		else (
+			reviews := dunion { { mk_(r, r.m_reviews(user)) | u in set dom r.m_reviews & u = user} | r in set m_products};
+			return reviews;
+		)
+	);
+	
+	-- Gets the competitions the user is competing on
+	public getUserCompetitions : () ==> [set of Competition]
+	getUserCompetitions() == 
+	(	
+		dcl competitions : set of Competition;
+		requireUserToBe(<Normal>);
+		competitions := { c | c in set m_activities & isofclass(Competition,c) and m_user in set narrow_(c,Competition).m_competitors};
+		return competitions;
+	);
+	
+	-- Gets the retailer with the lowest price on a product
+	public getLowestPriceRetailer : Product ==> [Retailer * rat]
+	getLowestPriceRetailer(product) == 
+	(	
+		dcl retailer : Retailer * rat; -- Retailer that sells for the lowest price
+		dcl retailers : set of (Retailer * rat); -- Retailers that sell the product
+		if product not in set m_products
+			then return nil
+		else (
+			retailers := { mk_(r, r.m_items(product).price) | r in set m_retailers & product in set dom r.m_items };
+			if exists r1 in set retailers & (forall r2 in set retailers & r1.#2 <= r2.#2)
+				then (
+					retailer := iota r1 in set retailers & (forall r2 in set retailers & r1.#2 <= r2.#2);
+					return retailer;
+				)
+			else return nil;
+		)
+	);
+	
+	--Adds a product to products set
+	public insertProduct : Product ==> ()
+	insertProduct(product) ==
+	(
+		requireUserToBe(<Brand>);
+		requireSameUsername(product.m_brand.m_name);
+		m_products := m_products union {product}
+	)
+	pre product not in set m_products and product.m_brand in set m_brands
+	post m_products = m_products~ union {product};
+	
+	--Adds a user to users set
+	public insertUser : User ==> ()
+	insertUser(user) ==
+	(
+		m_users := m_users union {user}
+	)
+	pre user not in set m_users
+	post m_users = m_users~ union {user};
+	
+	--Adds a retailer to retailers set
+	public insertRetailer : Retailer ==> ()
+	insertRetailer(retailer) ==
+	(
+		requireUserToBe(<Retailer>);
+		requireSameUsername(retailer.m_name);
+		m_retailers := m_retailers union {retailer}
+	)
+	pre retailer not in set m_retailers
+	post m_retailers = m_retailers~ union {retailer};
+	
+	--Adds an activity to activities set
+	public insertActivity : Activity ==> ()
+	insertActivity(activity) ==
+	(
+		requireUserToBe(<Brand>);
+		requireSameUsername(activity.m_brand.m_name);
+		m_activities := m_activities union {activity}
+	)
+	pre activity not in set m_activities
+	post m_activities = m_activities~ union {activity};
+	
+	--Adds a brand to brands set
+	public insertBrand : Brand ==> ()
+	insertBrand(brand) ==
+	(
+		requireUserToBe(<Brand>);
+		requireSameUsername(brand.m_name);
+		m_brands := m_brands union {brand}
+	)
+	pre brand not in set m_brands
+	post m_brands = m_brands~ union {brand};
+	
+	-- Adds a product to a retailer
+	public insertProductToRetailer : String * String * String * int * rat ==> [ map Product to Retailer`ItemInfo]
+	insertProductToRetailer(retailer_name, product_name, brand_name, stock, price) == 
+	(	
+		dcl brand : [Brand] := getBrand(brand_name);
+		dcl retailer: [Retailer] := getRetailer(retailer_name);
+		dcl product : [Product];
+		requireUserToBe(<Retailer>);
+		if brand = nil then return nil;
+		product := getProduct(product_name, brand);
+		if product = nil or retailer = nil then return nil
+		else (
+			requireSameUsername(retailer.m_name);
+			retailer.insertProduct(product, mk_Retailer`ItemInfo(stock, price));
+			return retailer.m_items;
+		)
+	);
+	
+	--Login
+	public login : String * String ==> [User]
+	login(username, password) == 
+	(
+		if exists1 u in set m_users & u.m_username = username and u.passwordMatches(password)
+			then ( 
+				m_user := iota u in set m_users & u.m_username = username and u.passwordMatches(password);
+				return m_user;
+			)
+		else return nil;
+	)
+	pre m_user = nil
+	post (RESULT <> nil and m_user <> nil) or (RESULT = nil and m_user = nil);
+	
+	--Logout
+	public logout : () ==> ()
+	logout() == 
+	(
+		m_user := nil;
+	)
+	pre m_user <> nil
+	post m_user = nil;
+	
+	-- Enforce user permissions
+	private requireUserToBe : User`Type ==> ()
+	requireUserToBe(type) == return
+	pre m_user <> nil and m_user.m_type = type or m_user.m_type = <Admin>;
+	
+	-- Enforce same username
+	private requireSameUsername : String ==> ()
+	requireSameUsername(name) == return
+	pre m_user <> nil and m_user.m_username = name or m_user.m_type = <Admin>;
+	
+	-- Start activity
+	public startActivity : String ==> ()
+	startActivity(title) == 
+	(	
+		dcl activity : [Activity] := getActivity(title);
+		requireUserToBe(<Brand>);
+		if activity <> nil
+			then (
+				requireSameUsername(activity.m_brand.m_name);
+				activity.startActivity();
+			)
+	);
+	
+	-- End activity
+	public endActivity : String ==> ()
+	endActivity(title) == 
+	(	
+		dcl activity : [Activity] := getActivity(title);
+		requireUserToBe(<Brand>);
+		if activity <> nil
+			then (
+				requireSameUsername(activity.m_brand.m_name);		
+				activity.endActivity();
+			)
+	);
+	
+	-- Add competitor to competition
+	public addCompetitor : String ==> ()
+	addCompetitor(title) == 
+	(	
+		dcl activity : [Activity] := getActivity(title);
+		dcl competition : Competition;
+		requireUserToBe(<Normal>);
+		if activity <> nil and isofclass(Competition, activity)
+			then (
+				competition := narrow_(activity, Competition);
+				competition.addCompetitor(m_user)
+			);
+	);
+	
+	-- Choose winner of a competition
+	public chooseWinner : String * String ==> ()
+	chooseWinner(title, username) == 
+	(	
+		dcl activity : [Activity] := getActivity(title);
+		dcl competition : Competition;
+		dcl user : [User] := getUser(username);
+		requireUserToBe(<Brand>);
+		if user <> nil and activity <> nil and isofclass(Competition, activity)
+			then (
+				requireSameUsername(activity.m_brand.m_name);
+				competition := narrow_(activity, Competition);
+				competition.chooseWinner(user);
+			)
+	);
+
+end ShopAdvizor

@@ -1,0 +1,43 @@
+class User
+/*
+  Defines a user to can use the app.
+  Since with different permitions are allowed to do different things,
+  those types are defined here.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
+	types
+		public String = seq1 of char;
+		public Type = <Normal> | <Retailer> | <Brand> | <Admin>
+	
+	instance variables
+		public m_username: String;
+		public m_type: Type;
+		private m_password: String;
+	
+	operations
+		-- User constructor
+		public User : String * String ==> User
+		User(username, password) ==
+		(
+			m_username := username;
+			m_password := password;
+			m_type := <Normal>;
+			return self;
+		);
+		
+		-- User constructor
+		public User : String * String * Type ==> User
+		User(username, password, type) ==
+		(
+			m_username := username;
+			m_password := password;
+			m_type := type;
+			return self;
+		);
+		
+		-- Checks if the password matches
+		public passwordMatches : String ==> bool
+		passwordMatches(password) == return m_password = password;
+		
+end User

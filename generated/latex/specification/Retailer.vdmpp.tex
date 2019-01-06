@@ -1,0 +1,57 @@
+\begin{vdmpp}[breaklines=true]
+class Retailer
+/*
+  Defines a retailer which can sell a product.
+  Daniel Marques & Eduarda Cunha, FEUP, MFES, 2018/19.
+*/
+
+types
+ public String = seq1 of char;
+ public ItemInfo :: stock: int
+             price: rat;
+
+instance variables
+ public m_name: String;
+ public m_items: map Product to ItemInfo := { |-> };
+
+operations
+ -- Retailer constructor
+(*@
+\label{Retailer:18}
+@*)
+ public Retailer : String ==> Retailer
+ Retailer(name) ==
+ (
+  m_name := name;
+  return self;
+ );
+ 
+ --Adds a product and its info (stock and price) to items map
+(*@
+\label{insertProduct:26}
+@*)
+ public insertProduct : Product * ItemInfo ==> ()
+ insertProduct(product, info) ==
+ (
+  m_items := m_items ++ {product |-> info}
+ )
+ pre product not in set dom m_items
+ post m_items = m_items~ ++ {product |-> info};
+
+end Retailer
+\end{vdmpp}
+\bigskip
+\begin{longtable}{|l|r|r|r|}
+\hline
+Function or operation & Line & Coverage & Calls \\
+\hline
+\hline
+\hyperref[Retailer:18]{Retailer} & 18&100.0\% & 3 \\
+\hline
+\hyperref[insertProduct:26]{insertProduct} & 26&100.0\% & 4 \\
+\hline
+\hline
+Retailer.vdmpp & & 100.0\% & 7 \\
+\hline
+\end{longtable}
+
